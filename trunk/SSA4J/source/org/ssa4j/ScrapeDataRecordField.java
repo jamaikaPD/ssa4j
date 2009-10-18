@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
  *
  */
 @Documented
-@Target(value=ElementType.METHOD)
+@Target(value={ElementType.METHOD, ElementType.FIELD})
 @Retention(value=RetentionPolicy.RUNTIME)
 public @interface ScrapeDataRecordField {
 	public enum FieldType {

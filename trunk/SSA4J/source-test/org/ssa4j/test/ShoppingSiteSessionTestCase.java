@@ -92,10 +92,10 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// are interacting with the POJOs.
 		for (Product product : shoppingsession.products) {
 			System.out.println( "=======================================" );
-			System.out.println( "Title: " + product.getTitle() );
-			System.out.println( "Model: " + product.getModel() );
-			System.out.println( "Shipping Weight: " + product.getWeight() );
-			System.out.println( "Manufactured By: " + product.getManufacturer() );
+			System.out.println( "Title: " + product.title );
+			System.out.println( "Model: " + product.model );
+			System.out.println( "Shipping Weight: " + product.weight );
+			System.out.println( "Manufactured By: " + product.manufacturer );
 			System.out.println( "=======================================" );
 		}
 		System.out.printf("Completed in %dms", System.currentTimeMillis()-startTime);
@@ -124,10 +124,10 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// are interacting with the POJOs.
 		for (Product product : shoppingsession.products) {
 			System.out.println( "=======================================" );
-			System.out.println( "Title: " + product.getTitle() );
-			System.out.println( "Model: " + product.getModel() );
-			System.out.println( "Shipping Weight: " + product.getWeight() );
-			System.out.println( "Manufactured By: " + product.getManufacturer() );
+			System.out.println( "Title: " + product.title );
+			System.out.println( "Model: " + product.model );
+			System.out.println( "Shipping Weight: " + product.weight );
+			System.out.println( "Manufactured By: " + product.manufacturer );
 			System.out.println( "=======================================" );
 		}
 		
@@ -157,10 +157,10 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// are interacting with the POJOs.
 		for (Product product : shoppingsession.products) {
 			System.out.println( "=======================================" );
-			System.out.println( "Title: " + product.getTitle() );
-			System.out.println( "Model: " + product.getModel() );
-			System.out.println( "Shipping Weight: " + product.getWeight() );
-			System.out.println( "Manufactured By: " + product.getManufacturer() );
+			System.out.println( "Title: " + product.title );
+			System.out.println( "Model: " + product.model );
+			System.out.println( "Shipping Weight: " + product.weight );
+			System.out.println( "Manufactured By: " + product.manufacturer );
 			System.out.println( "=======================================" );
 		}
 		
