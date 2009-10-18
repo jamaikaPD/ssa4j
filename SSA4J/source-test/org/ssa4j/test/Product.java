@@ -6,46 +6,13 @@ import org.ssa4j.ScrapeDataRecordField;
 @ScrapeDataRecord
 public class Product {
 
-	private String title;
-	private String model;
-	private String weight;
-	private String manufacturer;
-	
-	public String getTitle() {
-		return title;
-	}
-	
 	@ScrapeDataRecordField(name="TITLE")
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
-	public String getModel() {
-		return model;
-	}
-	
+	public String title;
 	@ScrapeDataRecordField(name="MODEL")
-	public void setModel(String model) {
-		this.model = model;
-	}
-	
-	public String getWeight() {
-		return weight;
-	}
-	
+	public String model;
 	@ScrapeDataRecordField(name="SHIPPING_WEIGHT")
-	public void setWeight(String weight) {
-		this.weight = weight;
-	}
-	
-	public String getManufacturer() {
-		return manufacturer;
-	}
-	
+	public String weight;
 	@ScrapeDataRecordField(name="MANUFACTURED_BY")
-	public void setManufacturer(String manufacturer) {
-		this.manufacturer = manufacturer;
-	}
-	
-	
+	public String manufacturer;
+
 }
