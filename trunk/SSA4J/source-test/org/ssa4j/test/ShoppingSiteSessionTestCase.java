@@ -1,6 +1,8 @@
 package org.ssa4j.test;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.ssa4j.RemoteScrapeSessionManager;
 import org.ssa4j.ScrapeSessionManager;
 import org.ssa4j.SoapScrapeSessionManager;
@@ -14,6 +16,7 @@ import junit.framework.TestCase;
 
 public class ShoppingSiteSessionTestCase extends TestCase {
 
+	protected static Logger log = LoggerFactory.getLogger(ShoppingSiteSessionTestCase.class);
 	
 	@Test
 	public void testUsingLegacyAPI() throws Exception {
@@ -55,18 +58,20 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		for( int i = 0; i < products.getNumDataRecords(); i++ )
 		{
 			DataRecord product = products.getDataRecord( i );
-			System.out.println( "=======================================" );
-			System.out.println( "Product #" + i );
-			System.out.println( "Title: " + product.get( "TITLE" ) );
-			System.out.println( "Model: " + product.get( "MODEL" ) );
-			System.out.println( "Shipping Weight: " + product.get( "SHIPPING_WEIGHT" ) );
-			System.out.println( "Manufactured By: " + product.get( "MANUFACTURED_BY" ) );
-			System.out.println( "=======================================" );
+			log.debug( "=======================================" );
+			log.debug( "Product #" + i );
+			log.debug( "Title: " + product.get( "TITLE" ) );
+			log.debug( "Model: " + product.get( "MODEL" ) );
+			log.debug( "Shipping Weight: " + product.get( "SHIPPING_WEIGHT" ) );
+			log.debug( "Manufactured By: " + product.get( "MANUFACTURED_BY" ) );
+			log.debug( "=======================================" );
 		}
 
 		// Be sure to disconnect from the server.
 		remoteScrapingSession.disconnect();
-		System.out.printf("Completed in %dms", System.currentTimeMillis()-startTime);
+		
+		assertEquals("Number of products scraped", 18, products.getNumDataRecords());
+		System.out.printf("Completed in %dms\n\n", System.currentTimeMillis()-startTime);
 	}
 	
 	@Test
@@ -91,14 +96,15 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
 		for (Product product : shoppingsession.products) {
-			System.out.println( "=======================================" );
-			System.out.println( "Title: " + product.title );
-			System.out.println( "Model: " + product.model );
-			System.out.println( "Shipping Weight: " + product.weight );
-			System.out.println( "Manufactured By: " + product.manufacturer );
-			System.out.println( "=======================================" );
+			log.debug( "=======================================" );
+			log.debug( "Title: " + product.title );
+			log.debug( "Model: " + product.model );
+			log.debug( "Shipping Weight: " + product.weight );
+			log.debug( "Manufactured By: " + product.manufacturer );
+			log.debug( "=======================================" );
 		}
-		System.out.printf("Completed in %dms", System.currentTimeMillis()-startTime);
+		assertEquals("Number of products scraped", 18, shoppingsession.products.length);
+		System.out.printf("Completed in %dms\n\n", System.currentTimeMillis()-startTime);
 	}
 	
 	@Test
@@ -123,15 +129,15 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
 		for (Product product : shoppingsession.products) {
-			System.out.println( "=======================================" );
-			System.out.println( "Title: " + product.title );
-			System.out.println( "Model: " + product.model );
-			System.out.println( "Shipping Weight: " + product.weight );
-			System.out.println( "Manufactured By: " + product.manufacturer );
-			System.out.println( "=======================================" );
+			log.debug( "=======================================" );
+			log.debug( "Title: " + product.title );
+			log.debug( "Model: " + product.model );
+			log.debug( "Shipping Weight: " + product.weight );
+			log.debug( "Manufactured By: " + product.manufacturer );
+			log.debug( "=======================================" );
 		}
-		
-		System.out.printf("Completed in %dms", System.currentTimeMillis()-startTime);
+		assertEquals("Number of products scraped", 18, shoppingsession.products.length);
+		System.out.printf("Completed in %dms\n\n", System.currentTimeMillis()-startTime);
 	}
 	
 	@Test
@@ -156,14 +162,15 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
 		for (Product product : shoppingsession.products) {
-			System.out.println( "=======================================" );
-			System.out.println( "Title: " + product.title );
-			System.out.println( "Model: " + product.model );
-			System.out.println( "Shipping Weight: " + product.weight );
-			System.out.println( "Manufactured By: " + product.manufacturer );
-			System.out.println( "=======================================" );
+			log.debug( "=======================================" );
+			log.debug( "Title: " + product.title );
+			log.debug( "Model: " + product.model );
+			log.debug( "Shipping Weight: " + product.weight );
+			log.debug( "Manufactured By: " + product.manufacturer );
+			log.debug( "=======================================" );
 		}
 		
-		System.out.printf("Completed in %dms", System.currentTimeMillis()-startTime);
+		assertEquals("Number of products scraped", 18, shoppingsession.products.length);
+		System.out.printf("Completed in %dms\n\n", System.currentTimeMillis()-startTime);
 	}
 }
