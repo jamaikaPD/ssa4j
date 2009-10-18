@@ -1,0 +1,124 @@
+<mocksession id="Shopping Site">
+	<scenario>
+
+		<test>
+		<![CDATA[
+		return session.page == 1;
+		]]>
+		</test>
+
+		<dataset id="PRODUCTS">
+			<datarecord>
+				<field name="TITLE">A Bug's Life</field>
+				<field name="MODEL">DVD-ABUG</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Warner</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">A Bug's Life "Multi Pak"</field>
+				<field name="MODEL">DVD-ABUG</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Warner</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">Beloved</field>
+				<field name="MODEL">DVD-BELOVED</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Warner</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">Blade Runner - Director's Cut</field>
+				<field name="MODEL">DVD-BLDRNDC</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Warner</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">Courage Under Fire</field>
+				<field name="MODEL">DVD-CUFI</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Fox</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">Die Hard With A Vengeance</field>
+				<field name="MODEL">DVD-DHWV</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Fox</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">Fire Down Below</field>
+				<field name="MODEL">DVD-FDBL</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Warner</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">Frantic</field>
+				<field name="MODEL">DVD-FRAN</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Warner</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">Lethal Weapon</field>
+				<field name="MODEL">DVD-LTWP</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Warner</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">Red Corner</field>
+				<field name="MODEL">DVD-REDC</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Warner</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">Speed</field>
+				<field name="MODEL">DVD-SPEED</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Fox</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">Speed 2: Cruise Control</field>
+				<field name="MODEL">DVD-SPEED2</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Fox</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">The Matrix</field>
+				<field name="MODEL">DVD-MATR</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Warner</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">The Replacement Killers</field>
+				<field name="MODEL">DVD-RPMK</field>
+				<field name="SHIPPING_WEIGHT">23.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Microsoft</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">There's Something About Mary</field>
+				<field name="MODEL">DVD-TSAB</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Fox</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">Under Siege</field>
+				<field name="MODEL">DVD-UNSG</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Warner</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">Under Siege 2 - Dark Territory</field>
+				<field name="MODEL">DVD-UNSG2</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Warner</field>
+			</datarecord> 
+			<datarecord>
+				<field name="TITLE">You've Got Mail</field>
+				<field name="MODEL">DVD-YGEM</field>
+				<field name="SHIPPING_WEIGHT">7.00 lbs.</field>
+				<field name="MANUFACTURED_BY">Warner</field>
+			</datarecord>
+		</dataset>
+
+	</scenario>
+
+
+</mocksession>
