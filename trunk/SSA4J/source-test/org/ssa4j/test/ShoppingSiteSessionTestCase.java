@@ -3,9 +3,9 @@ package org.ssa4j.test;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.ssa4j.RemoteScrapeSessionManager;
+import org.ssa4j.ProfessionalScrapeSessionManager;
 import org.ssa4j.ScrapeSessionManager;
-import org.ssa4j.SoapScrapeSessionManager;
+import org.ssa4j.EnterpriseScrapeSessionManager;
 import org.ssa4j.mock.MockScrapeSessionManager;
 
 import com.screenscraper.common.DataRecord;
@@ -88,7 +88,7 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// Create an instance of a ScrapeSessionManager
 		// NOTE: by default, a RemoteScrapeSessionManager is used which is compatible
 		// with both Profession and Enterprise editions of screen-scraper
-		ScrapeSessionManager scraper = new RemoteScrapeSessionManager();
+		ScrapeSessionManager scraper = new ProfessionalScrapeSessionManager();
 		
 		// Tell the ScrapeSessionManager to scrape by passing in the annotated POJO
 		scraper.scrape(shoppingsession);
@@ -121,7 +121,7 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// Create an instance of a ScrapeSessionManager
 		// NOTE: by default, a RemoteScrapeSessionManager is used which is compatible
 		// with both Profession and Enterprise editions of screen-scraper
-		ScrapeSessionManager scraper = new SoapScrapeSessionManager();
+		ScrapeSessionManager scraper = new EnterpriseScrapeSessionManager();
 		
 		// Tell the ScrapeSessionManager to scrape by passing in the annotated POJO
 		scraper.scrape(shoppingsession);
