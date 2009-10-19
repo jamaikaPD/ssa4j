@@ -30,5 +30,5 @@ public @interface ScrapeDataRecordField {
 	 * values into the expected class types.
 	 * @return
 	 */
-	String pattern() default "";
+	String format() default "";
 }

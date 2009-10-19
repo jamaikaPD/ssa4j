@@ -23,6 +23,6 @@ public @interface ScrapeSessionVariable {
 		ReadWrite
 	}
 	String name();
-	String format() default "%s";
+	String format() default "";
 	BindType bindtype() default BindType.Write;
 }

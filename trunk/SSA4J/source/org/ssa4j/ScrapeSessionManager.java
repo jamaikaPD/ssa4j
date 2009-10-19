@@ -175,8 +175,13 @@ public abstract class ScrapeSessionManager {
 					case Write:
 						String varname = meta.name();
 						Object value = f.get(source);
-						if (value != null)
-							setVariable(varname, String.format(meta.format(), value));						
+					
+						if (value != null) {
+							if (meta.format().length() > 0)
+								setVariable(varname, String.format(meta.format(), value));	
+							else 
+								setVariable(varname, value.toString());	
+						}
 					}
 				}
 			}
@@ -288,9 +293,9 @@ public abstract class ScrapeSessionManager {
 					case ReadWrite:
 					case Read:
 						String varname = meta.name();
-						Object value = getVariable(varname);
+						String value = getVariable(varname);
 						if (value != null) {
-							f.set(source, value);
+							f.set(source, ScrapeUtil.convert(f.getType(), meta.name(), meta.format(), value));
 						}
 					}
 				} else {

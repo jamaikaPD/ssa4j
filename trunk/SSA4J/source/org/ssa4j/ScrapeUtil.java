@@ -24,7 +24,7 @@ public class ScrapeUtil {
 		return c1 == c2;
 	}
 	
-	private static Object convert(Class<?> targetClass, ScrapeDataRecordField field, String source) throws Exception {
+	public static Object convert(Class<?> targetClass, String name, String sformat, String source) throws Exception {
 		Object value = null;
 		//
 		// Convert to Calendar?
@@ -32,8 +32,8 @@ public class ScrapeUtil {
 		if (instanceOf(targetClass, Calendar.class) ) {
 			Calendar cal = new GregorianCalendar();
 			SimpleDateFormat format;
-			if (field.pattern().length() > 0)
-				format = new SimpleDateFormat(field.pattern());
+			if (sformat.length() > 0)
+				format = new SimpleDateFormat(sformat);
 			else
 				format = new SimpleDateFormat();
 			cal.setTime(format.parse(source));
@@ -43,8 +43,8 @@ public class ScrapeUtil {
 		// Convert to String?
 		//
 		else if (instanceOf(targetClass, String.class)) {
-			if (field.pattern().length() > 0)
-				value = String.format(field.pattern(), source);
+			if (sformat.length() > 0)
+				value = String.format(sformat, source);
 			else
 				value = source.toString();
 		} 
@@ -84,7 +84,7 @@ public class ScrapeUtil {
 						String key = field.name();
 						String value = (String) rec.get(key);
 						if (value != null) {
-							m.invoke(obj, convert(m.getParameterTypes()[0], field, value));
+							m.invoke(obj, convert(m.getParameterTypes()[0], field.name(), field.format(), value));
 						}
 					} catch (Exception e) {
 						throw new Exception("Problem with method: " + m.getName(), e);
@@ -100,7 +100,7 @@ public class ScrapeUtil {
 						String key = field.name();
 						String value = (String) rec.get(key);
 						if (value != null) {
-							f.set(obj, convert(f.getType(), field, value));
+							f.set(obj, convert(f.getType(), field.name(), field.format(), value));
 						}
 					} catch (Exception e) {
 						throw new Exception("Problem with field: " + f.getName(), e);
