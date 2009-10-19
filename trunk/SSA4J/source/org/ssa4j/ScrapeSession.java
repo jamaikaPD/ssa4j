@@ -17,6 +17,6 @@ import java.lang.annotation.Target;
 @Target(value=ElementType.TYPE)
 @Retention(value=RetentionPolicy.RUNTIME)
 public @interface ScrapeSession {
-	String sessionId();
+	String name();
 	ScrapeSessionError[] errors() default {};
 }
