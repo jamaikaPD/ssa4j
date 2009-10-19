@@ -1,6 +1,0 @@
-#A data set is analogous to a result or record set that would be returned from a database query. 
-
-= Introduction =
-A data set is analogous to a result or record set that would be returned from a database query. A data set contains any number of data records, which are analogous to rows in a database. The dataSet object holds all data records extracted by an extractor pattern after it has been applied as many times as possible to the HTML retrieved by a scrapeable file.
-
-(see [http://community.screen-scraper.com/API/DataSet DataSet API Documentation])
