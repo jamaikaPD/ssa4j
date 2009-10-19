@@ -268,7 +268,7 @@ public abstract class ScrapeSessionManager {
 				if (f.isAnnotationPresent(ScrapeDataSet.class)) {
 					log.debug(String.format("@ScrapeDataSet (field:%s)", f.getName()));
 					ScrapeDataSet meta = f.getAnnotation(ScrapeDataSet.class);
-					String id = meta.identifier();
+					String id = meta.value();
 					int numRecs = getNumDataRecordsInDataSet(id);
 					if (numRecs > 0) {
 						Class arrayType = f.getType();

@@ -24,7 +24,7 @@ public class ShoppingSiteSession {
 	@ScrapeSessionVariable(name="PAGE")
 	public int page;
 	
-	@ScrapeDataSet(identifier="PRODUCTS")
+	@ScrapeDataSet("PRODUCTS")
 	public Product[] products;
 	
 }

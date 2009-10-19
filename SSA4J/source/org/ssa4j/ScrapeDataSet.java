@@ -21,5 +21,5 @@ public @interface ScrapeDataSet {
 	 * The name of an Extrator pattern that was saved as a Session Variable
 	 * during the scrape session.
 	 */
-	String identifier();
+	String value();
 }
