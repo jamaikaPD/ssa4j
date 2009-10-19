@@ -52,19 +52,20 @@ public class ScrapeUtil {
 		// Convert to Custom?
 		//
 		else {
-			Method m = targetClass.getMethod("valueOf", String.class);
-			if (m != null) {
+			try {
+				Method m = targetClass.getMethod("valueOf", String.class);
 				value = m.invoke(targetClass, source);
-			} else {
-				Constructor<?> constructor = targetClass.getConstructor(new Class[]{String.class});
-				value = constructor.newInstance(source);
-				if (constructor == null) {
+			} catch (NoSuchMethodException nsme) {	
+				try {
+					Constructor<?> constructor = targetClass.getConstructor(new Class[]{String.class});
+					value = constructor.newInstance(source);
+				} catch (Exception e) {
 					String msg = "@ScrapeDataRecord annotation reqiures that %s " +
-						"be one of the following:\n" +
-						"\t1. java.lang.String\n" +
-						"\t2. java.util.Calendar\n" +
-						"\t3. A class with a static method 'valueOf(String)'\n" +
-						"\t4. A class with a constructor that takes a single String parameter\n";
+					"be one of the following:\n" +
+					"\t1. java.lang.String\n" +
+					"\t2. java.util.Calendar\n" +
+					"\t3. A class with a static method 'valueOf(String)'\n" +
+					"\t4. A class with a constructor that takes a single String parameter\n";
 					throw new ScrapeException(String.format(msg, targetClass));
 				}
 			}
