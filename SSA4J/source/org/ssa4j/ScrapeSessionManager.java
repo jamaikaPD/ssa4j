@@ -150,7 +150,7 @@ public abstract class ScrapeSessionManager {
 	
 	public String getSessionId(Object source) {
 		if (source != null && source.getClass().isAnnotationPresent(ScrapeSession.class)) 
-			return source.getClass().getAnnotation(ScrapeSession.class).sessionId();
+			return source.getClass().getAnnotation(ScrapeSession.class).name();
 		return null;
 	}
 	
@@ -239,7 +239,7 @@ public abstract class ScrapeSessionManager {
 						(ScrapeSessionCookies) c.getAnnotation(ScrapeSessionCookies.class);
 					for (ScrapeSessionCookie cookieMeta : meta.cookies()) {
 						log.info("Reading Cookies ...");
-						String name = cookieMeta.varname();
+						String name = cookieMeta.value();
 						String value = this.getVariable(name);
 						log.info(String.format("Set-Cookie[name:%s value:%s]", name, value));
 						cookiejar.put(name, value);

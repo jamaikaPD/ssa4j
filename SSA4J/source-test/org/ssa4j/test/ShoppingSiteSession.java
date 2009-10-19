@@ -7,9 +7,9 @@ import org.ssa4j.ScrapeSessionCookies;
 import org.ssa4j.ScrapeSessionVariable;
 
 @ScrapeSessionCookies(cookies={
-	@ScrapeSessionCookie(varname="zenid")
+	@ScrapeSessionCookie("zenid")
 })
-@ScrapeSession(sessionId="Shopping Site")
+@ScrapeSession(name="Shopping Site")
 public class ShoppingSiteSession {
 	
 	@ScrapeSessionVariable(name="EMAIL_ADDRESS")
