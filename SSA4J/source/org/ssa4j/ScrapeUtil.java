@@ -92,7 +92,7 @@ public class ScrapeUtil {
 				}
 			}
 			
-			for (Field f : c.getFields()) {
+			for (Field f : c.getDeclaredFields()) {
 				f.setAccessible(true);
 				if (f.isAnnotationPresent(ScrapeDataRecordField.class)) {
 					try {
