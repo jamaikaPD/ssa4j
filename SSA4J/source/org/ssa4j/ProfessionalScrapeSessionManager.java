@@ -28,7 +28,7 @@ import com.screenscraper.scraper.RemoteScrapingSessionException;
  * @author Rodney Aiglstorfer
  *
  */
-public class RemoteScrapeSessionManager extends ScrapeSessionManager {
+public class ProfessionalScrapeSessionManager extends ScrapeSessionManager {
 	
 	private RemoteScrapingSession remoteSession;
 	
@@ -42,7 +42,7 @@ public class RemoteScrapeSessionManager extends ScrapeSessionManager {
 	 * Creates a RemoteScrapeSessionManager using the default settings 
 	 * for host, port, and timeout.
 	 */
-	public RemoteScrapeSessionManager() {
+	public ProfessionalScrapeSessionManager() {
 		super();
 		scraperHost = System.getProperty(ScrapeConstants.SS_HOST_KEY, "localhost");
 		scraperPort = Integer.parseInt(System.getProperty(ScrapeConstants.SS_PORT_KEY, "8778"));
@@ -58,7 +58,7 @@ public class RemoteScrapeSessionManager extends ScrapeSessionManager {
 	 * 
 	 * @throws ScrapeException 
 	 */
-	public RemoteScrapeSessionManager(String scraperHost, int scraperPort, int timeout) throws ScrapeException {
+	public ProfessionalScrapeSessionManager(String scraperHost, int scraperPort, int timeout) throws ScrapeException {
 		this.scraperHost = scraperHost;
 		this.scraperPort = scraperPort;
 		this.timeout = timeout;

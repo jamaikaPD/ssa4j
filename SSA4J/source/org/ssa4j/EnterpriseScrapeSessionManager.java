@@ -12,7 +12,7 @@ import com.screenscraper.soapclient.SOAPInterface;
 import com.screenscraper.soapclient.SOAPInterfaceService;
 import com.screenscraper.soapclient.SOAPInterfaceServiceLocator;
 
-public class SoapScrapeSessionManager extends ScrapeSessionManager {
+public class EnterpriseScrapeSessionManager extends ScrapeSessionManager {
 	
 	// Necessary calls to auto-generated classes.
 	SOAPInterface soap;
@@ -22,7 +22,7 @@ public class SoapScrapeSessionManager extends ScrapeSessionManager {
 	Map<String, String> sessionVariables = new HashMap<String, String>();
 	Map<String, DataSet> dataSetCache = new HashMap<String, DataSet>();
 	
-	public SoapScrapeSessionManager() throws ScrapeException {
+	public EnterpriseScrapeSessionManager() throws ScrapeException {
 		// "http://localhost:8779/axis/services/SOAPInterface";
 		String host = System.getProperty(ScrapeConstants.SS_HOST_KEY, "localhost");
 		int port = Integer.parseInt(System.getProperty(ScrapeConstants.SS_PORT_KEY, "8779"));
@@ -33,7 +33,7 @@ public class SoapScrapeSessionManager extends ScrapeSessionManager {
 		this.initialize(endpoint, timeout);
 	}
 	
-	public SoapScrapeSessionManager(String endpoint, int timeout) throws ScrapeException {
+	public EnterpriseScrapeSessionManager(String endpoint, int timeout) throws ScrapeException {
 		this.initialize(endpoint, timeout);
 	}
 	

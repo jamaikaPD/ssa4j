@@ -14,7 +14,7 @@ import com.screenscraper.common.DataRecord;
  * 
  * Subclass this class to create specialized ScrapeSessionManagers.
  * 
- * @see RemoteScrapeSessionManager
+ * @see ProfessionalScrapeSessionManager
  * @see MockScrapeSessionManager
  * 
  * @author Rodney Aiglstorfer
@@ -23,7 +23,7 @@ import com.screenscraper.common.DataRecord;
 public abstract class ScrapeSessionManager {
 	
 	public static ScrapeSessionManager createScrapeSessionManager() throws ScrapeException {
-		String className = System.getProperty(ScrapeConstants.SS_MANAGER_KEY, RemoteScrapeSessionManager.class.getName());
+		String className = System.getProperty(ScrapeConstants.SS_MANAGER_KEY, ProfessionalScrapeSessionManager.class.getName());
 		
 		try {
 			Class<?> managerClass = Class.forName(className);
