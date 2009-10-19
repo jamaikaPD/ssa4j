@@ -1,18 +1,20 @@
 package org.ssa4j.test;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import junit.framework.TestCase;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.ssa4j.EnterpriseScrapeSessionManager;
 import org.ssa4j.ProfessionalScrapeSessionManager;
 import org.ssa4j.ScrapeSessionManager;
-import org.ssa4j.EnterpriseScrapeSessionManager;
 import org.ssa4j.mock.MockScrapeSessionManager;
 
-import com.screenscraper.common.DataRecord;
 import com.screenscraper.common.DataSet;
 import com.screenscraper.scraper.RemoteScrapingSession;
-
-import junit.framework.TestCase;
 
 public class ShoppingSiteSessionTestCase extends TestCase {
 
@@ -53,20 +55,6 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// file.
 		DataSet products = ( DataSet )remoteScrapingSession.getVariable( "PRODUCTS" );
 
-		// Iterate through each of the data records screen-scraper
-		// extracted, outputting each of them to the browser.
-		for( int i = 0; i < products.getNumDataRecords(); i++ )
-		{
-			DataRecord product = products.getDataRecord( i );
-			log.debug( "=======================================" );
-			log.debug( "Product #" + i );
-			log.debug( "Title: " + product.get( "TITLE" ) );
-			log.debug( "Model: " + product.get( "MODEL" ) );
-			log.debug( "Shipping Weight: " + product.get( "SHIPPING_WEIGHT" ) );
-			log.debug( "Manufactured By: " + product.get( "MANUFACTURED_BY" ) );
-			log.debug( "=======================================" );
-		}
-
 		// Be sure to disconnect from the server.
 		remoteScrapingSession.disconnect();
 		
@@ -90,20 +78,14 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// with both Profession and Enterprise editions of screen-scraper
 		ScrapeSessionManager scraper = new ProfessionalScrapeSessionManager();
 		
+		Map<String, String> cookieJar = new HashMap<String, String>();
 		// Tell the ScrapeSessionManager to scrape by passing in the annotated POJO
-		scraper.scrape(shoppingsession);
+		scraper.scrape(shoppingsession, null, cookieJar);
 		
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
-		for (Product product : shoppingsession.products) {
-			log.debug( "=======================================" );
-			log.debug( "Title: " + product.title );
-			log.debug( "Model: " + product.model );
-			log.debug( "Shipping Weight: " + product.weight );
-			log.debug( "Manufactured By: " + product.manufacturer );
-			log.debug( "=======================================" );
-		}
-		assertEquals("Number of products scraped", 18, shoppingsession.products.length);
+		
+		assertSession(shoppingsession, cookieJar);
 		System.out.printf("Completed in %dms\n\n", System.currentTimeMillis()-startTime);
 	}
 	
@@ -123,20 +105,13 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// with both Profession and Enterprise editions of screen-scraper
 		ScrapeSessionManager scraper = new EnterpriseScrapeSessionManager();
 		
+		Map<String, String> cookieJar = new HashMap<String, String>();
 		// Tell the ScrapeSessionManager to scrape by passing in the annotated POJO
-		scraper.scrape(shoppingsession);
+		scraper.scrape(shoppingsession, null, cookieJar);
 		
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
-		for (Product product : shoppingsession.products) {
-			log.debug( "=======================================" );
-			log.debug( "Title: " + product.title );
-			log.debug( "Model: " + product.model );
-			log.debug( "Shipping Weight: " + product.weight );
-			log.debug( "Manufactured By: " + product.manufacturer );
-			log.debug( "=======================================" );
-		}
-		assertEquals("Number of products scraped", 18, shoppingsession.products.length);
+		assertSession(shoppingsession, cookieJar);
 		System.out.printf("Completed in %dms\n\n", System.currentTimeMillis()-startTime);
 	}
 	
@@ -156,21 +131,25 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// with both Profession and Enterprise editions of screen-scraper
 		ScrapeSessionManager scraper = new MockScrapeSessionManager();
 		
+		Map<String, String> cookieJar = new HashMap<String, String>();
 		// Tell the ScrapeSessionManager to scrape by passing in the annotated POJO
-		scraper.scrape(shoppingsession);
+		scraper.scrape(shoppingsession, null, cookieJar);
 		
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
-		for (Product product : shoppingsession.products) {
-			log.debug( "=======================================" );
-			log.debug( "Title: " + product.title );
-			log.debug( "Model: " + product.model );
-			log.debug( "Shipping Weight: " + product.weight );
-			log.debug( "Manufactured By: " + product.manufacturer );
-			log.debug( "=======================================" );
-		}
 		
-		assertEquals("Number of products scraped", 18, shoppingsession.products.length);
+		assertSession(shoppingsession, cookieJar);
 		System.out.printf("Completed in %dms\n\n", System.currentTimeMillis()-startTime);
+	}
+	
+	public void assertSession(ShoppingSiteSession session, Map<String,String> cookieJar) {
+		assertNotNull("zenid", cookieJar.get("zenid"));
+		assertEquals("Number of products scraped", 18, session.products.length);
+		for (Product product : session.products) {
+			assertNotNull("Title", product.title);
+			assertNotNull("Model", product.model );
+			assertNotNull("Shipping Weight", product.weight );
+			assertNotNull("Manufactured By", product.manufacturer );
+		}
 	}
 }

@@ -6,6 +6,10 @@
 		return session.page == 1;
 		]]>
 		</test>
+		
+		<variables>
+			<variable name="zenid">2DFS3423SEAAFE3487</variable>
+		</variables>
 
 		<dataset id="PRODUCTS">
 			<datarecord>
