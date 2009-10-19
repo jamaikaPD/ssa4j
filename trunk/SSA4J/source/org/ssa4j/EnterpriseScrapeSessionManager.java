@@ -62,7 +62,7 @@ public class EnterpriseScrapeSessionManager extends ScrapeSessionManager {
 	}
 
 	@Override
-	protected void execute(Object source, CookieJar cookiejar)
+	protected void execute(Object source, Map<String,String> cookiejar)
 			throws ScrapeException {
 		String sessionId = getSessionId(source);
 		
