@@ -15,7 +15,7 @@ public abstract class ScrapeScriptDeployer {
 
 	protected static Logger log = LoggerFactory.getLogger(ScrapeScriptDeployer.class);
 	
-	protected ClassLoader loader = ClassLoader.getSystemClassLoader();
+	protected ClassLoader loader = ScrapeScriptDeployer.class.getClassLoader();
 	
 	public void setClassLoader(ClassLoader loader) {
 		this.loader = loader;
@@ -72,7 +72,18 @@ public abstract class ScrapeScriptDeployer {
 		ZipEntry entry;
 
         while ((entry = zip.getNextEntry()) != null) {
-            deploy(entry.getName(), zip);    
+        	if (entry.getName().endsWith(".zip")) {
+				
+				deploy(new ZipInputStream(zip));
+				
+			} else if (entry.getName().endsWith(".sss")) {
+				
+				deploy(entry.getName(), zip);    
+				
+			} else {
+				log.info(String.format("Ignoring '%s'", entry.getName()));
+			}
+            
         }
 
         zip.close();
