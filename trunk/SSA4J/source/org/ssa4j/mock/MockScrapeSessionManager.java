@@ -8,10 +8,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
 import org.ssa4j.ScrapeConstants;
 import org.ssa4j.ScrapeException;
 import org.ssa4j.ScrapeSessionManager;
@@ -44,7 +41,7 @@ import com.screenscraper.common.DataSet;
 public class MockScrapeSessionManager extends ScrapeSessionManager {
 	
 	private HashMap<String, DataSet> datasets = new HashMap<String, DataSet>();
-	private Map<String, String> variables;
+	private Map<String, String> variables = new HashMap<String, String>();
 	private File scenarioDirectory;
 	
 	public MockScrapeSessionManager() {
@@ -64,7 +61,6 @@ public class MockScrapeSessionManager extends ScrapeSessionManager {
 	@Override
 	protected void execute(Object source, Map<String,String> cookiejar) throws ScrapeException {
 		String sessionId = getSessionId(source);
-		Serializer serializer = new Persister();
 		
 		String filename = String.format("%s.xml", sessionId);
 		log.info("Loading " + filename);
@@ -87,7 +83,7 @@ public class MockScrapeSessionManager extends ScrapeSessionManager {
 				}
 			}
 			
-			MockSession mockSession = serializer.read(MockSession.class, in);
+			MockSession mockSession = MockObject.toObject(MockSession.class, in);
 			log.debug(String.format("Number of Scenarios: %d", mockSession.scenarios.size()));
 			for (MockScenario scenario : mockSession.scenarios) {
 				log.debug("-------------- scenario -------------\n\n\n");
@@ -97,15 +93,19 @@ public class MockScrapeSessionManager extends ScrapeSessionManager {
 						for (MockDataRecord mockRecord : mockdataset.datarecords) {
 							log.debug(mockRecord.toString());
 							DataRecord datarec = new DataRecord();
-							for (Entry<String, String> entry : mockRecord.map.entrySet()) {
-								datarec.put(entry.getKey(), entry.getValue());
+							for (MockDataRecordField field : mockRecord.fields) {
+								datarec.put(field.name, field.value);
 							}
 							dataset.addDataRecord(datarec);
 						}
 						datasets.put(mockdataset.id, dataset);
 					}
-					if (scenario.variables != null)
-						variables = scenario.variables.map;
+					if (scenario.variables != null) {
+						for (MockVariable var : scenario.variables) {
+							this.variables.put(var.name, var.value);
+						}
+					}
+						
 					return;
 				}
 			}

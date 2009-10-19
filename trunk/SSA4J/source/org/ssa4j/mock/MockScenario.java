@@ -1,10 +1,11 @@
 package org.ssa4j.mock;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * POJO that binds to the &lt;scenario/&gt; tags in a Mock session data file.
@@ -12,15 +13,16 @@ import org.simpleframework.xml.Root;
  * @author Rodney Aiglstorfer
  *
  */
-@Root(name="scenario")
-public class MockScenario extends MockObject {
+@XmlType(name="scenarioType")
+public class MockScenario {
 	
-	@Element(name="test")
+	@XmlElement(name="test")
 	public String testScript;
 	
-	@ElementList(name="dataset", inline=true, required=false)
-	public ArrayList<MockDataSet> datasets = new ArrayList<MockDataSet>();
+	@XmlElement(name="dataset", required=false)
+	public List<MockDataSet> datasets = new ArrayList<MockDataSet>();
 	
-	@Element(name="variables", required=false)
-	public MockVariables variables = new MockVariables();
+	@XmlElementWrapper(name="variables", required=false)
+	@XmlElement(name="variable", required=false)
+	public List<MockVariable> variables = new ArrayList<MockVariable>();
 }

@@ -1,9 +1,13 @@
 package org.ssa4j.mock;
 
-import java.io.StringWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Base class for all Mock objects.
@@ -11,18 +15,46 @@ import org.simpleframework.xml.core.Persister;
  * @author Rodney Aiglstorfer
  *
  */
+@XmlTransient
 public class MockObject {
+	
+	@SuppressWarnings("unchecked")
+    private static Class[] ctx = {
+    	MockDataRecord.class,
+    	MockDataRecordField.class,
+    	MockDataSet.class,
+    	MockScenario.class,
+    	MockVariable.class,
+    	MockSession.class
+    };
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T toObject(Class<T> c, InputStream in) throws Exception {
+		Unmarshaller um = JAXBContext.newInstance(ctx).createUnmarshaller();
+		
+		return (T) um.unmarshal(in);
+	}
+	
+	public void toXML(OutputStream out) throws Exception {
+		Marshaller m =	JAXBContext.newInstance(ctx).createMarshaller();
+		
+		m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE );
+		
+		m.marshal( this, out );
+	}
+	
+	public String toXML() throws Exception {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		this.toXML(out);
+		return out.toString("UTF-8");
+	}
+	
 	public String toString() {
-		Serializer serializer = new Persister();
-		StringWriter result = new StringWriter();
-
 		try {
-			serializer.write(this, result);
+			return this.toXML();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return super.toString();
 		}
-		
-		return result.toString();
-
 	}
 }

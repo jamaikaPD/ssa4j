@@ -1,23 +1,24 @@
 package org.ssa4j.mock;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * POJO that binds to the &lt;mocksession/&gt; tags in a Mock session data file.
  * 
  * @author Rodney Aiglstorfer
  */
-@Root(name="mocksession")
+@XmlRootElement(name="mocksession")
 public class MockSession extends MockObject {
 	
-	@Attribute
+	@XmlAttribute
 	public String id;
 	
-	@ElementList(inline=true)
-	public ArrayList<MockScenario> scenarios = new ArrayList<MockScenario>();
+	@XmlElement(name="scenario")
+	public List<MockScenario> scenarios = new ArrayList<MockScenario>();
 	
 }

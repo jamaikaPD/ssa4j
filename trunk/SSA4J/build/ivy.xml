@@ -40,9 +40,9 @@
 					rev="1.6.3"
 					conf="mock->default"/>
 					
-		<dependency org="simple" 
-					name="simple-xml" 
-					rev="2.0.4"
+		<dependency org="javax.xml" 
+					name="jaxb" 
+					rev="2.1"
 					conf="mock->default"/>
 					
 		<dependency org="slf4j" 

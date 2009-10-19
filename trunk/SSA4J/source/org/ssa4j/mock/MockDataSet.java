@@ -1,25 +1,25 @@
 package org.ssa4j.mock;
 
 import java.util.ArrayList;
+import java.util.List;
 
-
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * POJO that binds to the &lt;dataset/&gt; tags in a Mock session data file.
  * 
  * @author Rodney Aiglstorfer
  */
-@Root(name="dataset")
-public class MockDataSet extends MockObject {
+@XmlType(name="datasetType")
+public class MockDataSet {
 	
-	@Attribute
+	@XmlAttribute
 	public String id;
 	
-	@ElementList(name="datarecord", inline=true)
-	public ArrayList<MockDataRecord> datarecords = new ArrayList<MockDataRecord>();
+	@XmlElement(name="datarecord")
+	public List<MockDataRecord> datarecords = new ArrayList<MockDataRecord>();
 	
 	
 }
