@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script overwrite-on-import="true"><script-text>import java.lang.String;
+
+httpstate = session.getState();
+cookiearray = httpstate.getCookies();
+session.log("Found " + cookiearray.length + " cookies");
+for (i=0; i&lt;cookiearray.length; i++)
+{
+	cookiestring = cookiearray[i].toExternalForm();
+	session.log("+++Found set cookie: " + cookiestring);
+}</script-text><name>General--detect cookies</name><language>Interpreted Java</language><date_exported>July 28, 2009 10:28:55</date_exported></script>
