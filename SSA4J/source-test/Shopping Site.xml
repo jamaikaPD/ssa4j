@@ -1,4 +1,7 @@
-<mocksession id="Shopping Site">
+<?xml version="1.0" encoding="UTF-8"?>
+<ssa4j:mocksession xmlns:ssa4j="http://schemas.mobuser.com/ssa4jmock" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://schemas.mobuser.com/ssa4jmock ../schemas/ssa4jmock.xsd " id="Shopping Site">
 	<scenario>
 
 		<test>
@@ -125,4 +128,4 @@
 	</scenario>
 
 
-</mocksession>
+</ssa4j:mocksession>

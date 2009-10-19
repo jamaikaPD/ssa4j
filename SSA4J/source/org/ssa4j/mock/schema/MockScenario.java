@@ -1,4 +1,4 @@
-package org.ssa4j.mock;
+package org.ssa4j.mock.schema;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Rodney Aiglstorfer
  *
  */
-@XmlType(name="scenarioType")
+@XmlType(name="scenarioType", namespace="http://schemas.mobuser.com/ssa4jmock")
 public class MockScenario {
 	
 	@XmlElement(name="test")
