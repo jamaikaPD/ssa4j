@@ -12,7 +12,6 @@ import java.util.Map.Entry;
 
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-import org.ssa4j.CookieJar;
 import org.ssa4j.ScrapeConstants;
 import org.ssa4j.ScrapeException;
 import org.ssa4j.ScrapeSessionManager;
@@ -63,7 +62,7 @@ public class MockScrapeSessionManager extends ScrapeSessionManager {
 	}
 
 	@Override
-	protected void execute(Object source, CookieJar cookiejar) throws ScrapeException {
+	protected void execute(Object source, Map<String,String> cookiejar) throws ScrapeException {
 		String sessionId = getSessionId(source);
 		Serializer serializer = new Persister();
 		
@@ -156,7 +155,7 @@ public class MockScrapeSessionManager extends ScrapeSessionManager {
 	 * called 'session'
 	 * @return Returns true if script logic returns true, false otherwise.
 	 */
-	private Boolean test(String script, Object source, CookieJar cookiejar) {
+	private Boolean test(String script, Object source, Map<String,String> cookiejar) {
 		log.debug(String.format("Running Script {\n%s\n}", script));
 		Binding binding = new Binding();
 		binding.setVariable("cookiejar", cookiejar);

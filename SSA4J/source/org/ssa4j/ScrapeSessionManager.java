@@ -2,6 +2,8 @@ package org.ssa4j;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +76,7 @@ public abstract class ScrapeSessionManager {
 	 * @param source The object annotated with the ScrapeSession annotation
 	 * @throws ScrapeException
 	 */
-	protected abstract void execute(Object source, CookieJar cookiejar) throws ScrapeException;
+	protected abstract void execute(Object source, Map<String,String> cookiejar) throws ScrapeException;
 	
 	/**
 	 * Regardless of the manner in which the scrape has terminated this method
@@ -88,7 +90,7 @@ public abstract class ScrapeSessionManager {
 		this.scrape(source, null, null);
 	}
 	
-	public void scrape(Object source, ScrapeSessionListener listener, CookieJar cookiejar) throws ScrapeException {
+	public void scrape(Object source, ScrapeSessionListener listener, Map<String,String> cookiejar) throws ScrapeException {
 		if (source.getClass().isAnnotationPresent(ScrapeSession.class) == false) 
 			throw new ScrapeException("Object is not correctly annotated.  Expecting @ScrapeSession.");
 		
@@ -157,12 +159,12 @@ public abstract class ScrapeSessionManager {
 	 * @param source The {@link ScrapeSession} annotated object.
 	 * @throws ScrapeException
 	 */
-	private void setup(Object source, CookieJar cookiejar) throws ScrapeException {
+	private void setup(Object source, Map<String,String> cookiejar) throws ScrapeException {
 		setup(source.getClass(), source, cookiejar);
 	}
 	
 	@SuppressWarnings({ "unchecked" })
-	private void setup(Class c, Object source, CookieJar cookiejar) throws ScrapeException {
+	private void setup(Class c, Object source, Map<String,String> cookiejar) throws ScrapeException {
 		try {
 			for (Field f : c.getDeclaredFields()) {
 				f.setAccessible(true);
@@ -183,11 +185,10 @@ public abstract class ScrapeSessionManager {
 				setup(superclass, source, cookiejar);
 			}
 			if (cookiejar != null) {
-				String[] names = cookiejar.getAttributeNames();
-				for (String name : names) {
-					String value = cookiejar.getAttribute(name);
-					setVariable(name, value);
-					log.info(String.format("Reflecting Cookie[name:%s value:%s]", name, value));
+				
+				for (Entry<String, String> entry : cookiejar.entrySet()) {
+					setVariable(entry.getKey(), entry.getValue());
+					log.info(String.format("Reflecting Cookie[name:%s value:%s]", entry.getKey(), entry.getValue()));
 				}
 			}
 		} catch (Exception e) {
@@ -202,7 +203,7 @@ public abstract class ScrapeSessionManager {
 	 * @throws ScrapeException
 	 */
 	@SuppressWarnings({ "unchecked" })
-	private void process(Object source, CookieJar cookiejar) throws ScrapeException {
+	private void process(Object source, Map<String,String> cookiejar) throws ScrapeException {
 		Class c = source.getClass();
 		
 		log.debug("Processing Variables and DataSets ...");
@@ -221,7 +222,7 @@ public abstract class ScrapeSessionManager {
 	}
 	
 	@SuppressWarnings({ "unchecked" })
-	private void processCookies(Class c, Object source, CookieJar cookiejar) throws ScrapeException {
+	private void processCookies(Class c, Object source, Map<String,String> cookiejar) throws ScrapeException {
 		try {
 			log.info(String.format("cookiejar: %b class: %b", cookiejar!=null, c.isAnnotationPresent(ScrapeSessionCookies.class)));
 			//
@@ -236,7 +237,7 @@ public abstract class ScrapeSessionManager {
 						String name = cookieMeta.varname();
 						String value = this.getVariable(name);
 						log.info(String.format("Set-Cookie[name:%s value:%s]", name, value));
-						cookiejar.setAttribute(name, value);
+						cookiejar.put(name, value);
 						log.info("Cookies Added to CookieJar");
 					}
 				} else {
@@ -254,7 +255,7 @@ public abstract class ScrapeSessionManager {
 	}
 	
 	@SuppressWarnings({ "unchecked" })
-	private void processVariablesAndDataSets(Class c, Object source, CookieJar cookiejar) throws ScrapeException {
+	private void processVariablesAndDataSets(Class c, Object source, Map<String,String> cookiejar) throws ScrapeException {
 		
 		try {
 			for (Field f : c.getDeclaredFields()) {

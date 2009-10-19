@@ -2,6 +2,7 @@ package org.ssa4j;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.screenscraper.common.DataRecord;
@@ -75,7 +76,7 @@ public class ProfessionalScrapeSessionManager extends ScrapeSessionManager {
 	}
 
 	@Override
-	protected void execute(Object source, CookieJar cookiejar) throws ScrapeException {
+	protected void execute(Object source, Map<String, String> cookiejar) throws ScrapeException {
 		try {
 			String sessionId = getSessionId(source);
 			log.info(String.format(">> Connecting to Screen-Scraper '%s:%d' ", scraperHost, scraperPort));
