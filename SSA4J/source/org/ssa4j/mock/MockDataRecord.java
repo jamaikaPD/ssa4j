@@ -1,9 +1,11 @@
 package org.ssa4j.mock;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
 
 /**
  * POJO that binds to the &lt;field/&gt; tags in a Mock session data file.
@@ -11,10 +13,10 @@ import org.simpleframework.xml.Root;
  * @author Rodney Aiglstorfer
  *
  */
-@Root(name="datarecord")
-public class MockDataRecord extends MockObject {
+@XmlType(name="datarecordType")
+public class MockDataRecord {
 	
-	@ElementMap(entry="field", key="name", attribute=true, inline=true)
-	public Map<String, String> map;
+	@XmlElement(name="field")
+	public List<MockDataRecordField> fields = new ArrayList<MockDataRecordField>();
 	
 }
