@@ -8,11 +8,14 @@ public class Product {
 
 	@ScrapeDataRecordField(name="TITLE")
 	public String title;
+	
 	@ScrapeDataRecordField(name="MODEL")
 	public String model;
+	
 	@ScrapeDataRecordField(name="SHIPPING_WEIGHT")
 	public Float weight;
+	
 	@ScrapeDataRecordField(name="MANUFACTURED_BY")
-	public String manufacturer;
+	public Manufacturer manufacturer;
 
 }
