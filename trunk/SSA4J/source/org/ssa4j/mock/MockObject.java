@@ -9,6 +9,13 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.ssa4j.mock.schema.MockDataRecord;
+import org.ssa4j.mock.schema.MockDataRecordField;
+import org.ssa4j.mock.schema.MockDataSet;
+import org.ssa4j.mock.schema.MockScenario;
+import org.ssa4j.mock.schema.MockSession;
+import org.ssa4j.mock.schema.MockVariable;
+
 /**
  * Base class for all Mock objects.
  * 

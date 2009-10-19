@@ -12,6 +12,12 @@ import java.util.Map;
 import org.ssa4j.ScrapeConstants;
 import org.ssa4j.ScrapeException;
 import org.ssa4j.ScrapeSessionManager;
+import org.ssa4j.mock.schema.MockDataRecord;
+import org.ssa4j.mock.schema.MockDataRecordField;
+import org.ssa4j.mock.schema.MockDataSet;
+import org.ssa4j.mock.schema.MockScenario;
+import org.ssa4j.mock.schema.MockSession;
+import org.ssa4j.mock.schema.MockVariable;
 
 import com.screenscraper.common.DataRecord;
 import com.screenscraper.common.DataSet;
