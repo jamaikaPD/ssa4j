@@ -27,7 +27,19 @@
 		</fileset>
 	</path>
 
-	<target name="make-dist" depends="compile, make-jar" />
+	<target name="make-dist" depends="compile, make-jar">
+		<zip destfile="${dist.dir}/${ant.project.name}-${version}.zip">
+			<zipfileset dir="${dist.dir}">
+				<include name="*.jar"/>
+			</zipfileset>
+			<zipfileset dir="${basedir}">
+				<include name="${lib.dir}/**/*.jar"/>
+			</zipfileset>
+			<zipfileset dir="${build.dir}">
+				<include name="*.ivy"/>
+			</zipfileset>
+		</zip>
+	</target>
 
 	<target name="clean" description="Deletes the classes and dist artifacts">
 		<delete dir="${classes.dir}" />
