@@ -3,7 +3,7 @@
 == Introduction ==
 This tutorial assumes that you already have a working knowledge of the core concepts of [http://community.screen-scraper.com/documentation screen-scraper].  It expands on [http://community.screen-scraper.com/Tutorial_4_Page_1 Tutorial 4: Scraping an E-commerce Site from External Programs] to demonstrate how SSA4J is used to create an API that is easier to use and more consistent with Java.
 
-== Scraping From an External Java Program (a.k. The "Old Way")  ==
+== Scraping From an External Java Program (a.k.a The "Old Way")  ==
 
 Before proceeding it would be a good idea to go through [http://community.screen-scraper.com/Tutorial_2_page_1 Tutorial 2], if you haven't done so already.
 
