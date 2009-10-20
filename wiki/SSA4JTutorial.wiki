@@ -139,6 +139,7 @@ public class Product {
 }
 }}}
 
+== Using the API ==
 Finally we have a clean Java API that hides all the String literals and `RemoteScrapingSession` scaffolding.  Using it is simple and is very clear to anyone looking at the Java what properties to set and what values can be read from the session.
 
 {{{
@@ -162,7 +163,7 @@ for(Product product : session.getProducts())
 }}}
 
 = Create a Java API for the Shopping Site using SSA4J =
-Now that you have seen everything that you would have to do normally to create a Java API around a the `RemoteScrapingSession` libraries. Lets take the same example, but this time use SSA4J.
+Now that you have seen everything that you would have to do normally to create a Java API around a the `RemoteScrapingSession` libraries. Lets take the same example, but this time using SSA4J.
 
 == !ShoppingSiteScrapingSession Class ==
 Notice right away how much less code is required.  In fact, this object looks like a basic POJO.  You don't even see a single reference to the `RemoteScrapingSession` libraries anywhere.
@@ -194,6 +195,7 @@ public class ShoppingSiteScrapingSession {
 == Product Class ==
 Notice again the complete absence of any reference to the `RemoteScrapingSession` libraries.  In particular there is no trace of DataRecord anywhere.
 {{{
+@ScrapeSession(name = "Shopping Site")
 public class ShoppingSiteScrapingSession {
 
     @ScrapeSessionVariable(name = "EMAIL_ADDRESS")
@@ -227,4 +229,28 @@ public class ShoppingSiteScrapingSession {
     }
 
 }
+}}}
+
+== Using the API ==
+Using thses annotated classes, kicking off a scrape session requires an instance of a [SSA4JAPI#ScrapeSessionManager ScrapeSessionManager].  For the purpose of this tutorial, below is an example using the [SSA4JAPI#ProfessionalScrapeSessionManager ProfessionalScrapeSessionManager] but there is also a [SSA4JAPI#EnterpriseScrapeSessionManager EnterpriseScrapeSessionManager] and a [SSA4JAPI#MockScrapeSessionManager MockScrapeSessionManager].
+
+{{{
+ShoppingSiteScrapingSession session = new ShoppingSiteScrapingSession();
+session.setEmailAddress("test@test.com");
+session.setPassword("testing");
+session.setSearchKeyWord("dvd");
+session.setPage(1);
+
+ScrapeSessionManager manager = new ProfessionalScrapeSessionManager();
+manager.scrape(session);
+
+for (Product product : session.getProducts()) {
+    System.out.println("==============");
+    System.out.println("Title: " + product.getTitle());
+    System.out.println("Model: " + product.getModel());
+    System.out.println("Shipping Weight: " + product.getWeight());
+    System.out.println("Manufactured By: "+ product.getManufacturer());
+    System.out.println("==============");
+}   
+    
 }}}
