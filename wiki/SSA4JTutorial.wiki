@@ -44,10 +44,10 @@ remoteScrapingSession.disconnect();
 == Why the Old Way is "Bad" ==
 Although the above code doesn't appear all that bad; there are some serious drawbacks to working directly with the `RemoteScrapingSession` class:
 
-# Code is not self-documenting
-# Impossible for someone that isn't familiar with the scrape code to know what the session variables are or what content is returned from the scrape
-# Impossible to "mock" or in someway unit test without calling screen-scraper every time the code is invoked
-# Extremely brittle, as the names of variables, datasets, and sessions change over time, the calling code "breaks"
+  # Code is not self-documenting
+  # Impossible for someone that isn't familiar with the scrape code to know what the session variables are or what content is returned from the scrape
+  # Impossible to "mock" or in someway unit test without calling screen-scraper every time the code is invoked
+  # Extremely brittle, as the names of variables, datasets, and sessions change over time, the calling code "breaks"
 
 
 = Creating a Java API for the Shopping Site WITHOUT using SSA4J =
@@ -165,7 +165,7 @@ for(Product product : session.getProducts())
 = Create a Java API for the Shopping Site using SSA4J =
 Now that you have seen everything that you would have to do normally to create a Java API around a the `RemoteScrapingSession` libraries. Lets take the same example, but this time using SSA4J.
 
-== !ShoppingSiteScrapingSession Class ==
+== !ShoppingSiteScrapingSession Class (Annotated) ==
 Notice right away how much less code is required.  In fact, this object looks like a basic POJO.  You don't even see a single reference to the `RemoteScrapingSession` libraries anywhere.
 
 {{{
@@ -192,8 +192,8 @@ public class ShoppingSiteScrapingSession {
 }
 }}}
 
-== Product Class ==
-Notice again the complete absence of any reference to the `RemoteScrapingSession` libraries.  In particular there is no trace of DataRecord anywhere.
+== Product Class (Annotated) ==
+Notice again the complete absence of any reference to the `RemoteScrapingSession` libraries.  In particular there is no trace of `DataRecord` anywhere.
 {{{
 @ScrapeSession(name = "Shopping Site")
 public class ShoppingSiteScrapingSession {
@@ -231,8 +231,8 @@ public class ShoppingSiteScrapingSession {
 }
 }}}
 
-== Using the API ==
-Using thses annotated classes, kicking off a scrape session requires an instance of a [SSA4JAPI#ScrapeSessionManager ScrapeSessionManager].  For the purpose of this tutorial, below is an example using the [SSA4JAPI#ProfessionalScrapeSessionManager ProfessionalScrapeSessionManager] but there is also a [SSA4JAPI#EnterpriseScrapeSessionManager EnterpriseScrapeSessionManager] and a [SSA4JAPI#MockScrapeSessionManager MockScrapeSessionManager].
+== Using the Annotated API ==
+Using these annotated classes, kicking off a scrape session requires an instance of a [SSA4JAPI#ScrapeSessionManager ScrapeSessionManager].  Below is an example using the [SSA4JAPI#ProfessionalScrapeSessionManager ProfessionalScrapeSessionManager] but there is also a [SSA4JAPI#EnterpriseScrapeSessionManager EnterpriseScrapeSessionManager] and a [SSA4JAPI#MockScrapeSessionManager MockScrapeSessionManager].
 
 {{{
 ShoppingSiteScrapingSession session = new ShoppingSiteScrapingSession();
