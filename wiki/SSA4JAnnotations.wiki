@@ -1,14 +1,14 @@
 #summary SSA4J Annotation Reference
 #labels Featured,Phase-Implementation
 
-= @ScrapeSession =
+== @ScrapeSession ==
 
-= @ScrapeSessionCookies =
+== @ScrapeSessionCookies ==
 
-= @ScrapeSesssionVariable =
+== @ScrapeSesssionVariable ==
 
-= @ScrapeDataSet =
+== @ScrapeDataSet ==
 
-= @ScrapeDataRecord =
+== @ScrapeDataRecord ==
 
-= @ScrapeDataRecordField =
+== @ScrapeDataRecordField ==
