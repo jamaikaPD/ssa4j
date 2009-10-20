@@ -193,7 +193,7 @@ public class ShoppingSiteScrapingSession {
 
 == Product Class ==
 Notice again the complete absence of any reference to the `RemoteScrapingSession` libraries.  In particular there is no trace of DataRecord anywhere.
-{{
+{{{
 public class ShoppingSiteScrapingSession {
 
     @ScrapeSessionVariable(name = "EMAIL_ADDRESS")
@@ -227,4 +227,4 @@ public class ShoppingSiteScrapingSession {
     }
 
 }
-}}
+}}}
