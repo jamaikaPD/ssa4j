@@ -65,7 +65,7 @@ remoteScrapingSession.disconnect();
 == Why the Old Way is "Bad" ==
 To be honest, the above code isn't all that bad.   That said, there are some drawbacks that make creating a formal API around a `RemoteScrapingSession` extremely tedious.  
 
-For example, we would start by wanting a Java class that explicitly declares all of the required session variables.  A class like this would look something like this:
+For example, we would start by wanting a Java class `ShoppingSiteScrapingSession` that explicitly declares all of the required session variables.  A class like this would look something like this:
 
 {{{
 // Create a new Subclass of RemoteScrapingSession that abstracts the caller
@@ -101,7 +101,7 @@ public class ShoppingSiteScrapingSession extends RemoteScrapingSession {
 }
 }}}
 
-This is a little better than what we had to use before, to use it we might do something that looks like this:
+This is a little better than what we had to use before; and to use it we might do something that looks like this:
 
 {{{
 ShoppingSiteScrapingSession session = new ShoppingSiteScrapingSession();
