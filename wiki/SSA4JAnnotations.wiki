@@ -1,7 +1,7 @@
 #summary SSA4J Annotation Reference
 #labels Featured,Phase-Implementation
 
-== @ScrapeSession ==
+== !@ScrapeSession ==
 
 == @ScrapeSessionCookies ==
 
