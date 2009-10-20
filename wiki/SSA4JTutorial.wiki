@@ -45,6 +45,20 @@ remoteScrapingSession.scrape();
 // file.
 DataSet products = ( DataSet )remoteScrapingSession.getVariable( "PRODUCTS" );
 
+// Iterate through each of the data records screen-scraper
+// extracted, outputting each of them to the browser.
+for( int i = 0; i < products.getNumDataRecords(); i++ )
+{
+    DataRecord product = products.getDataRecord( i );
+    System.out.println( "=======================================" );
+    System.out.println( "Product #" + i );
+    System.out.println( "Title: " + product.get( "TITLE" ) );
+    System.out.println( "Model: " + product.get( "MODEL" ) );
+    System.out.println( "Shipping Weight: " + product.get( "SHIPPING_WEIGHT" ) );
+    System.out.println( "Manufactured By: " + product.get( "MANUFACTURED_BY" ) );
+    System.out.println( "=======================================" );
+}
+
 // Be sure to disconnect from the server.
 remoteScrapingSession.disconnect();
 
