@@ -1,6 +1,6 @@
 #summary A quick start guide that demonstrates how to use SSA4J annotations
 
-<wiki:toc max_depth="1" />
+<wiki:toc max_depth="3" />
 
 == Introduction ==
 This tutorial assumes that you already have a working knowledge of the core concepts of [http://community.screen-scraper.com/documentation screen-scraper].  It expands on [http://community.screen-scraper.com/Tutorial_4_Page_1 Tutorial 4: Scraping an E-commerce Site from External Programs] to demonstrate how SSA4J is used to create an API that is easier to use and more consistent with Java.
