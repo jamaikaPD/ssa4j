@@ -2,10 +2,10 @@
 
 <wiki:toc max_depth="3" />
 
-== Introduction ==
+= Introduction =
 This tutorial assumes that you already have a working knowledge of the core concepts of [http://community.screen-scraper.com/documentation screen-scraper].  It expands on [http://community.screen-scraper.com/Tutorial_4_Page_1 Tutorial 4: Scraping an E-commerce Site from External Programs] to demonstrate how SSA4J is used to create an API that is easier to use and more consistent with Java.
 
-== Scraping From an External Java Program (a.k.a The "Old Way")  ==
+= Scraping From an External Java Program (a.k.a The "Old Way")  =
 
 Before proceeding it would be a good idea to go through [http://community.screen-scraper.com/Tutorial_2_page_1 Tutorial 2], if you haven't done so already.
 
@@ -71,7 +71,7 @@ Now, the above code isn't all that bad, but the drawbacks are what make creating
 
 Additionally, having to know all the String literal values for every !DataRecord is extremely difficult to manage, even if you use a constants file to managed all the keys. 
 
-== 3 Steps to SSA4J Bliss ==
+= 3 Steps to SSA4J Bliss =
 The process of creating a proper Java API for a scrape session using SSA4J can be accomplished with 3 easy steps:
 
   # Create and Annotate a Class for your !ScrapeSession and within it define all the variables and datasets
@@ -81,7 +81,7 @@ The process of creating a proper Java API for a scrape session using SSA4J can b
 
 If we wanted to create a proper API for the scrape session described above we would likely want to create a Class called `ShoppingSiteScrapingSession` that contained explicit getters and setters for each of the session variables (e.g. setEmailAddress(), setPassword(), etc.).
 
-=== Create A Class to Represent the Shopping Site Scrape Session ===
+== Create A Class to Represent the Shopping Site Scrape Session ==
 
 
 {{{
