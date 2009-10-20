@@ -72,7 +72,9 @@ Below is a good example of all that you would have to do to create a Java API ar
 // from having to know anything about the underlying RemoteScrapingSession
 // and exposes a "typed" interface for setting session variables and 
 // retrieving product content that was scraped from the site.
-public class ShoppingSiteScrapingSession extends RemoteScrapingSession {
+public class ShoppingSiteScrapingSession {
+
+    RemoteScrapingSession session;
     
     // This is a simple constructor that hides the string literal "Shopping Site"
     // from the caller.  This is useful in the event that this string changes
@@ -80,29 +82,29 @@ public class ShoppingSiteScrapingSession extends RemoteScrapingSession {
     public ShoppingSiteScrapingSession() 
       throws UnknownHostException, RemoteScrapingSessionException, IOException
     {
-        super("Shopping Site");
+        session = new RemoteScrapingSession("Shopping Site");
     }
   
     // Now we create a setter method for every session variable that we want
     // the caller to provide.  For each, we call this.setVariable(..)
     // with the String literal required for each session variable.  
     public void setEmailAddress(String emailAddress) throws RemoteScrapingSessionException {
-        this.setVariable( "EMAIL_ADDRESS", emailAddress );
+        session.setVariable( "EMAIL_ADDRESS", emailAddress );
     }
     public void setPassword(String password) throws RemoteScrapingSessionException {
-        this.setVariable( "PASSWORD",  password );
+        session.setVariable( "PASSWORD",  password );
     }
     public void setSearchKeyWord(String searchKeyWord) throws RemoteScrapingSessionException {
-        this.setVariable("SEARCH", searchKeyWord );
+        session.setVariable("SEARCH", searchKeyWord );
     }
     public void setPage(int page) throws RemoteScrapingSessionException {
-        this.setVariable( "PAGE", Integer.toString(page));
+        session.setVariable( "PAGE", Integer.toString(page));
     }
     
     // Because we don't want to expose the raw the DataSet to the caller, we create
     // a method that converts the DataSet into an array of Product objects
     public Product[] getProducts() throws RemoteScrapingSessionException {
-        DataSet dset = ( DataSet )this.getVariable( "PRODUCTS" );
+        DataSet dset = ( DataSet )session.getVariable( "PRODUCTS" );
         Product[] products = new Product[dset.getNumDataRecords()];
         for( int i = 0; i < products.length; i++ )
         {
@@ -110,6 +112,10 @@ public class ShoppingSiteScrapingSession extends RemoteScrapingSession {
             products[i] = new Product(rec);
         }
         return products;
+    }
+
+    public void scrape() throws RemoteScrapingSessionException {
+        session.scrape();
     }
 }
 }}}
@@ -143,7 +149,7 @@ public class Product {
 }
 }}}
 
-Assuming we have the Java API as shown above, using it is pretty clean ...
+Finally we have a clean Java API that hides all the String literals and `RemoteScrapingSession` scaffolding.  Using it is simple and is very clear to anyone looking at the Java what properties to set and what values can be read from the session.
 
 {{{
 ShoppingSiteScrapingSession session = new ShoppingSiteScrapingSession();
@@ -165,56 +171,7 @@ for(Product product : session.getProducts())
 }
 }}}
 
-Unfortunately when we now want to interact with the DataSets that are returned from the scrape (e.g. products) we are once again faced with having to know all the necessary String literals and not having a clean Java Class that encapsulates the !DataSet.
-
-To deal with this, you would need to add a new method that converts the raw DataSet into an Array of Product objects.  The method could look something like this:
-
-{{{
-public Product[] getProducts() throws RemoteScrapingSessionException {
-    // pull the DataSet from the scraping session using the "PRODUCT" 
-    // string literal 
-    DataSet dset = ( DataSet )this.getVariable( "PRODUCTS" );
-    
-    // Create a Product[] large enough to hold all the records
-    Product[] products = new Product[dset.getNumDataRecords()];
-    
-    // Iterate over all the records, for each create a Product wrapper around the DataRecord
-    for( int i = 0; i < products.length; i++ )
-    {
-        DataRecord rec = dset.getDataRecord( i );
-        products[i] = new Product(rec);
-    }
-    return products;
-}
-}}}
-
-If you want to hide the `DataSet` interactions and instead return an Array of `Product` Objects you might create a `Product` class that takes a `DataRecord` object as a constructor object and during creation, extracts all the relevant fields from the `DataRecord` into the `Product` instance.
-
-{{{
-public class Product {
-
-    public Product(DataRecord rec) {
-        this.title = rec.get( "TITLE" );
-        this.model = rec.get( "MODEL" );
-        this.weight = rec.get( "SHIPPING_WEIGHT" );
-        this.manufacturer = rec.get( "MANUFACTURED_BY" );
-    }
-
-    public String title;
-    
-    public String model;
-    
-    public Float weight;
-    
-    public String manufacturer;
-
-}
-}}}
-
-
- 
-
-= Create a Java API for the Shopping Site using SSA4J in 3 Simple Steps =
+= Create a Java API for the Shopping Site using SSA4J =
 The process of creating a proper Java API for a scrape session using SSA4J can be accomplished with 2 easy steps:
 
   # Create and Annotate a Class for your !ScrapeSession
