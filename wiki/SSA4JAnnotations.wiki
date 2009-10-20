@@ -3,12 +3,12 @@
 
 == @!ScrapeSession ==
 
-== @ScrapeSessionCookies ==
+== @!ScrapeSessionCookies ==
 
-== @ScrapeSesssionVariable ==
+== @!ScrapeSesssionVariable ==
 
-== @ScrapeDataSet ==
+== @!ScrapeDataSet ==
 
-== @ScrapeDataRecord ==
+== @!ScrapeDataRecord ==
 
-== @ScrapeDataRecordField ==
+== @!ScrapeDataRecordField ==
