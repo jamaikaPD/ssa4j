@@ -65,7 +65,7 @@ remoteScrapingSession.disconnect();
 == Why the Old Way is "Bad" ==
 To be honest, the above code isn't all that bad.   That said, there are some drawbacks that make creating a formal API around a `RemoteScrapingSession` extremely tedious.  
 
-For example, we would start by wanting a Java class `ShoppingSiteScrapingSession` that explicitly declares all of the required session variables.  A class like this would look something like this:
+Below is a good example of all that you would have to do to create a Java API around `RemoteScrapingSession` for the example above ...
 
 {{{
 // This is a subclass of RemoteScrapingSession that abstracts the caller
@@ -143,7 +143,7 @@ public class Product {
 }
 }}}
 
-This is a little better than what we had to use before; and to use it we might do something that looks like this:
+Assuming we have the Java API as shown above, using it is pretty clean ...
 
 {{{
 ShoppingSiteScrapingSession session = new ShoppingSiteScrapingSession();
@@ -153,6 +153,16 @@ session.setSearchKeyWord("dvd");
 session.setPage(1);
 
 session.scrape();
+
+for(Product product : session.getProducts())
+{
+    System.out.println( "==============" );
+    System.out.println( "Title: " + product.getTitle() );
+    System.out.println( "Model: " + product.getModel() );
+    System.out.println( "Shipping Weight: " + product.getWeight() );
+    System.out.println( "Manufactured By: " + product.getManufacturer() );
+    System.out.println( "==============" );
+}
 }}}
 
 Unfortunately when we now want to interact with the DataSets that are returned from the scrape (e.g. products) we are once again faced with having to know all the necessary String literals and not having a clean Java Class that encapsulates the !DataSet.
