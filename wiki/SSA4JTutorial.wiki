@@ -173,23 +173,40 @@ Notice right away how much less code is required.  In fact, this object looks li
 @ScrapeSession(name="Shopping Site")
 public class ShoppingSiteScrapingSession {
     
-    @ScrapeSessionVariable(name="EMAIL_ADDRESS")
-    private String email;
+    @ScrapeSessionVariable(name = "EMAIL_ADDRESS")
+    protected String email;
+
+    @ScrapeSessionVariable(name = "PASSWORD")
+    protected String password;
+    
+    @ScrapeSessionVariable(name = "SEARCH")
+    protected String searchKeyWord;
+    
+    @ScrapeSessionVariable(name = "PAGE")
+    protected Integer page;
+
+    @ScrapeDataSet("PRODUCTS")
+    protected Product[] products;
+    
+    
     public void setEmailAddress(String email) {
         this.email = email;
     }
-    
-    @ScrapeSessionVariable(name="PASSWORD")
-    private String password;
-    
-    @ScrapeSessionVariable(name="SEARCH")
-    private String search;
-    
-    @ScrapeSessionVariable(name="PAGE")
-    private int page;
-    
-    @ScrapeDataSet("PRODUCTS")
-    public Product[] products;
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public void setSearchKeyWord(String searchKeyWord) {
+        this.searchKeyWord = searchKeyWord;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public Product[] getProducts() {
+        return products;
+    }
 }
 }}}
 
@@ -199,34 +216,31 @@ Notice again the complete absence of any reference to the `RemoteScrapingSession
 @ScrapeSession(name = "Shopping Site")
 public class ShoppingSiteScrapingSession {
 
-    @ScrapeSessionVariable(name = "EMAIL_ADDRESS")
-    private String email;
-    public void setEmailAddress(String email) {
-        this.email = email;
-    }
+    @ScrapeDataRecordField(name="TITLE")
+    private String title;
+    
+    @ScrapeDataRecordField(name="MODEL")
+    private String model;
+    
+    @ScrapeDataRecordField(name="SHIPPING_WEIGHT")
+    private String weight;
 
-    @ScrapeSessionVariable(name = "PASSWORD")
-    private String password;
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    @ScrapeDataRecordField(name="MANUFACTURED_BY")
+    private String manufacturer;
 
-    @ScrapeSessionVariable(name = "SEARCH")
-    private String searchKeyWord;
-    public void setSearchKeyWord(String searchKeyWord) {
-        this.searchKeyWord = searchKeyWord;
+    public String getTitle() {
+        return title;
     }
-
-    @ScrapeSessionVariable(name = "PAGE")
-    private Integer page;
-    public void setPage(int page) {
-        this.page = page;
+    public String getModel() {
+        return model;
     }
-
-    @ScrapeDataSet("PRODUCTS")
-    private Product[] products;
-    public Product[] getProducts() {
-        return products;
+    
+    public String getWeight() {
+        return weight;
+    }
+    
+    public String getManufacturer() {
+        return manufacturer;
     }
 
 }
