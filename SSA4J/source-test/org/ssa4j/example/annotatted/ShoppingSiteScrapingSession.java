@@ -14,31 +14,36 @@ import org.ssa4j.ScrapeSessionVariable;
 public class ShoppingSiteScrapingSession {
 
 	@ScrapeSessionVariable(name = "EMAIL_ADDRESS")
-	private String email;
+	protected String email;
+
+	@ScrapeSessionVariable(name = "PASSWORD")
+	protected String password;
+	
+	@ScrapeSessionVariable(name = "SEARCH")
+	protected String searchKeyWord;
+	
+	@ScrapeSessionVariable(name = "PAGE")
+	protected Integer page;
+
+	@ScrapeDataSet("PRODUCTS")
+	protected Product[] products;
+	
+	
 	public void setEmailAddress(String email) {
 		this.email = email;
 	}
 
-	@ScrapeSessionVariable(name = "PASSWORD")
-	private String password;
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	@ScrapeSessionVariable(name = "SEARCH")
-	private String searchKeyWord;
 	public void setSearchKeyWord(String searchKeyWord) {
 		this.searchKeyWord = searchKeyWord;
 	}
 
-	@ScrapeSessionVariable(name = "PAGE")
-	private Integer page;
 	public void setPage(int page) {
 		this.page = page;
 	}
 
-	@ScrapeDataSet("PRODUCTS")
-	private Product[] products;
 	public Product[] getProducts() {
 		return products;
 	}

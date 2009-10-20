@@ -8,24 +8,27 @@ public class Product {
 
 	@ScrapeDataRecordField(name="TITLE")
 	private String title;
-	public String getTitle() {
-		return title;
-	}
 	
 	@ScrapeDataRecordField(name="MODEL")
 	private String model;
+	
+	@ScrapeDataRecordField(name="SHIPPING_WEIGHT")
+	private String weight;
+
+	@ScrapeDataRecordField(name="MANUFACTURED_BY")
+	private String manufacturer;
+
+	public String getTitle() {
+		return title;
+	}
 	public String getModel() {
 		return model;
 	}
 	
-	@ScrapeDataRecordField(name="SHIPPING_WEIGHT")
-	private String weight;
 	public String getWeight() {
 		return weight;
 	}
 	
-	@ScrapeDataRecordField(name="MANUFACTURED_BY")
-	private String manufacturer;
 	public String getManufacturer() {
 		return manufacturer;
 	}
