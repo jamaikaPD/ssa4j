@@ -1,0 +1,18 @@
+#summary SSA4J API Reference
+#labels Featured,Phase-Implementation
+
+== ScrapeSessionManager ==
+
+=== ProfessionalScrapeSessionManager ===
+
+===  EnterpriseScrapeSessionManager ===
+
+===  MockScrapeSessionManager ===
+
+== ScrapeScriptDeployer ==
+
+===  ProfessionalScrapeScriptDeployer ===
+
+===  EnterpriseScrapeScriptDeployer ===
+
+== ScrapeSessionListener ==
