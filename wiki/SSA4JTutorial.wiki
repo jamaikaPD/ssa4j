@@ -5,7 +5,7 @@
 = Introduction =
 This tutorial assumes that you already have a working knowledge of the core concepts of [http://community.screen-scraper.com/documentation screen-scraper].  It expands on [http://community.screen-scraper.com/Tutorial_4_Page_1 Tutorial 4: Scraping an E-commerce Site from External Programs] to demonstrate how SSA4J is used to create an API that is easier to use and more consistent with Java.
 
-= Scraping From an External Java Program (a.k.a The "Old Way")  =
+== Scraping From an External Java Program the "Old Way"  ==
 
 Before proceeding it would be a good idea to go through [http://community.screen-scraper.com/Tutorial_2_page_1 Tutorial 2], if you haven't done so already.
 
@@ -16,11 +16,7 @@ Before proceeding it would be a good idea to go through [http://community.screen
 {{{
 // Generate a RemoteScrapingSession object, which 
 // acts as the driver, or interface, to screen-scraper.
-// If you're running screen-scraper on a different computer 
-// than the one the Java file resides on you'll want to 
-// modify and use the top version instead of the bottom one.
 RemoteScrapingSession remoteScrapingSession = new RemoteScrapingSession("Shopping Site");
-remoteScrapingSession.setVariable( "PAGE", "1" );
 
 // Set the variables.
 // Remember that these two top variables correspond to the POST
@@ -52,13 +48,13 @@ DataSet products = ( DataSet )remoteScrapingSession.getVariable( "PRODUCTS" );
 for( int i = 0; i < products.getNumDataRecords(); i++ )
 {
     DataRecord product = products.getDataRecord( i );
-    System.out.println( "=======================================" );
+    System.out.println( "==============" );
     System.out.println( "Product #" + i );
     System.out.println( "Title: " + product.get( "TITLE" ) );
     System.out.println( "Model: " + product.get( "MODEL" ) );
     System.out.println( "Shipping Weight: " + product.get( "SHIPPING_WEIGHT" ) );
     System.out.println( "Manufactured By: " + product.get( "MANUFACTURED_BY" ) );
-    System.out.println( "=======================================" );
+    System.out.println( "==============" );
 }
 
 // Be sure to disconnect from the server.
@@ -66,31 +62,114 @@ remoteScrapingSession.disconnect();
 
 }}}
 
+== Why the Old Way is "Bad" ==
+To be honest, the above code isn't all that bad.   That said, there are some drawbacks that make creating a formal API around a `RemoteScrapingSession` extremely tedious.  
 
-Now, the above code isn't all that bad, but the drawbacks are what make creating a formal API around a "scraper" extremely tedious.  Take for example all the examples of `remoteScrapingSession.setVariable(...)`.  In the above example there are at least four values that must be set (e.g. EMAIL_ADDRESS, PASSWORD, SEARCH, and PAGE). 
+For example, we would start by wanting a Java class that explicitly declares all of the required session variables.  A class like this would look something like this:
 
-Additionally, having to know all the String literal values for every !DataRecord is extremely difficult to manage, even if you use a constants file to managed all the keys. 
+{{{
+// Create a new Subclass of RemoteScrapingSession that abstracts the caller
+// from having to know about specific String literals
+public class ShoppingSiteScrapingSession extends RemoteScrapingSession {
+    
+    // This is a simple constructor that hides the string literal "Shopping Site"
+    // from the caller.  This is useful in the event that this string changes
+    // later during development it won't impact anyone creating this class.
+    public ShoppingSiteScrapingSession() 
+      throws UnknownHostException, RemoteScrapingSessionException, IOException
+    {
+        super("Shopping Site");
+    }
+  
+    // Now we create a setter method for every session variable that we want
+    // the caller to provide.  For each, we call this.setVariable(..)
+    // with the String literal required for each.  Again, this approach insulates the 
+    // developer from changes to the string literals.
+    public void setEmailAddress(String emailAddress) throws RemoteScrapingSessionException {
+        this.setVariable( "EMAIL_ADDRESS", emailAddress );
+    }
+    public void setPassword(String password) throws RemoteScrapingSessionException {
+        this.setVariable( "PASSWORD",  password );
+    }
+    public void setSearchKeyWord(String searchKeyWord) throws RemoteScrapingSessionException {
+        this.setVariable("SEARCH", searchKeyWord );
+    }
+    public void setPage(int page) throws RemoteScrapingSessionException {
+        this.setVariable( "PAGE", Integer.toString(page));
+    }
+    
+}
+}}}
 
-= 3 Steps to SSA4J Bliss =
-The process of creating a proper Java API for a scrape session using SSA4J can be accomplished with 3 easy steps:
+This is a little better than what we had to use before, to use it we might do something that looks like this:
 
-  # Create and Annotate a Class for your !ScrapeSession and within it define all the variables and datasets
+{{{
+ShoppingSiteScrapingSession session = new ShoppingSiteScrapingSession();
+session.setEmailAddress("test@test.com");
+session.setPassword("testing");
+session.setSearchKeyWord("dvd");
+session.setPage(1);
+
+session.scrape();
+}}}
+
+Unfortunately when we now want to interact with the DataSets that are returned from the scrape (e.g. Products) we are once again faced with having to know all the necessary String literals and not having a clean Java Class that encapsulates the !DataSet.
+
+If you want to hide the `DataSet` interactions and instead return an Array of `Product` Objects you might create a `Product` class that takes a `DataRecord` object as a constructor object and during creation, extracts all the relevant fields from the `DataRecord` into the `Product` instance.
+
+{{{
+public class Product {
+
+	public Product(DataRecord rec) {
+		this.title = rec.get( "TITLE" );
+		this.model = rec.get( "MODEL" );
+	    this.weight = rec.get( "SHIPPING_WEIGHT" );
+	    this.manufacturer = rec.get( "MANUFACTURED_BY" );
+	}
+
+	public String title;
+	
+	public String model;
+	
+	public Float weight;
+	
+	public String manufacturer;
+
+}
+}}}
+
+
+ 
+
+= Create a Java API for the Shopping Site using SSA4J in 3 Simple Steps =
+The process of creating a proper Java API for a scrape session using SSA4J can be accomplished with 2 easy steps:
+
+  # Create and Annotate a Class for your !ScrapeSession
   # Create and Annotate a Class for each !DataRecord you expect to find in a session's !DataSet
-  # Create and use and instance of ScrapeSessionManager and pass it your annotated Scrape Session class to invoke screen-scraper 
 
 
 If we wanted to create a proper API for the scrape session described above we would likely want to create a Class called `ShoppingSiteScrapingSession` that contained explicit getters and setters for each of the session variables (e.g. setEmailAddress(), setPassword(), etc.).
 
-== Create A Class to Represent the Shopping Site Scrape Session ==
+== Step 1. Create and Annotate A Class to Represent the Shopping Site Scrape Session ==
 
+To begin, lets start by creating a class that clearly declares all the session variables that are required.
 
 {{{
 public class ShoppingSiteScrapingSession {
-	private String emailAddress;
-	private String password;
-	private String search;
-	private int page;
-	
-	// getters and setters here ... 
+  private String emailAddress;
+  private String password;
+  private String search;
+  private int page;
+    
+  // getters and setters here ... 
+}
+}}}
+
+Annotate the using the @!ScrapeSession annotation.  Notice that the `name` field on the annotation is set to `"Shopping Site"`.
+
+{{{
+@ScrapeSession(name="Shopping Site")
+public class ShoppingSiteScrapingSession {
+...
 }
 }}}
