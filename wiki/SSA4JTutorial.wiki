@@ -68,36 +68,78 @@ To be honest, the above code isn't all that bad.   That said, there are some dra
 For example, we would start by wanting a Java class `ShoppingSiteScrapingSession` that explicitly declares all of the required session variables.  A class like this would look something like this:
 
 {{{
-// Create a new Subclass of RemoteScrapingSession that abstracts the caller
-// from having to know about specific String literals
+// This is a subclass of RemoteScrapingSession that abstracts the caller
+// from having to know anything about the underlying RemoteScrapingSession
+// and exposes a "typed" interface for setting session variables and 
+// retrieving product content that was scraped from the site.
 public class ShoppingSiteScrapingSession extends RemoteScrapingSession {
-    
-    // This is a simple constructor that hides the string literal "Shopping Site"
-    // from the caller.  This is useful in the event that this string changes
-    // later during development it won't impact anyone creating this class.
-    public ShoppingSiteScrapingSession() 
-      throws UnknownHostException, RemoteScrapingSessionException, IOException
-    {
-        super("Shopping Site");
-    }
+	
+	// This is a simple constructor that hides the string literal "Shopping Site"
+	// from the caller.  This is useful in the event that this string changes
+	// later during development it won't impact anyone creating this class.
+	public ShoppingSiteScrapingSession() 
+	  throws UnknownHostException, RemoteScrapingSessionException, IOException
+	{
+		super("Shopping Site");
+	}
   
-    // Now we create a setter method for every session variable that we want
-    // the caller to provide.  For each, we call this.setVariable(..)
-    // with the String literal required for each.  Again, this approach insulates the 
-    // developer from changes to the string literals.
-    public void setEmailAddress(String emailAddress) throws RemoteScrapingSessionException {
-        this.setVariable( "EMAIL_ADDRESS", emailAddress );
-    }
-    public void setPassword(String password) throws RemoteScrapingSessionException {
-        this.setVariable( "PASSWORD",  password );
-    }
-    public void setSearchKeyWord(String searchKeyWord) throws RemoteScrapingSessionException {
-        this.setVariable("SEARCH", searchKeyWord );
-    }
-    public void setPage(int page) throws RemoteScrapingSessionException {
-        this.setVariable( "PAGE", Integer.toString(page));
-    }
-    
+	// Now we create a setter method for every session variable that we want
+	// the caller to provide.  For each, we call this.setVariable(..)
+	// with the String literal required for each session variable.  
+	public void setEmailAddress(String emailAddress) throws RemoteScrapingSessionException {
+		this.setVariable( "EMAIL_ADDRESS", emailAddress );
+	}
+	public void setPassword(String password) throws RemoteScrapingSessionException {
+		this.setVariable( "PASSWORD",  password );
+	}
+	public void setSearchKeyWord(String searchKeyWord) throws RemoteScrapingSessionException {
+		this.setVariable("SEARCH", searchKeyWord );
+	}
+	public void setPage(int page) throws RemoteScrapingSessionException {
+		this.setVariable( "PAGE", Integer.toString(page));
+	}
+	
+	// Because we don't want to expose the raw the DataSet to the caller, we create
+	// a method that converts the DataSet into an array of Product objects
+	public Product[] getProducts() throws RemoteScrapingSessionException {
+		DataSet dset = ( DataSet )this.getVariable( "PRODUCTS" );
+		Product[] products = new Product[dset.getNumDataRecords()];
+		for( int i = 0; i < products.length; i++ )
+		{
+		    DataRecord rec = dset.getDataRecord( i );
+		    products[i] = new Product(rec);
+		}
+		return products;
+	}
+}
+}}}
+
+{{{
+// This is a wrapper around DataRecord that abstracts the caller
+// from having to know anything about the underlying DataRecord.
+public class Product {
+
+	private DataRecord rec;
+	
+	public Product(DataRecord rec) {
+		this.rec = rec;
+	}
+
+	public String getTitle() {
+		return (String) rec.get( "TITLE" );
+	}
+	
+	public String getModel() {
+		return (String) rec.get( "MODEL" );
+	}
+	
+	public String getWeight() {
+		return (String) rec.get( "SHIPPING_WEIGHT" );
+	}
+	
+	public String getManufacturer() {
+		return (String) rec.get( "MANUFACTURED_BY" );
+	}
 }
 }}}
 
@@ -113,27 +155,48 @@ session.setPage(1);
 session.scrape();
 }}}
 
-Unfortunately when we now want to interact with the DataSets that are returned from the scrape (e.g. Products) we are once again faced with having to know all the necessary String literals and not having a clean Java Class that encapsulates the !DataSet.
+Unfortunately when we now want to interact with the DataSets that are returned from the scrape (e.g. products) we are once again faced with having to know all the necessary String literals and not having a clean Java Class that encapsulates the !DataSet.
+
+To deal with this, you would need to add a new method that converts the raw DataSet into an Array of Product objects.  The method could look something like this:
+
+{{{
+public Product[] getProducts() throws RemoteScrapingSessionException {
+	// pull the DataSet from the scraping session using the "PRODUCT" 
+	// string literal 
+	DataSet dset = ( DataSet )this.getVariable( "PRODUCTS" );
+	
+	// Create a Product[] large enough to hold all the records
+	Product[] products = new Product[dset.getNumDataRecords()];
+	
+	// Iterate over all the records, for each create a Product wrapper around the DataRecord
+	for( int i = 0; i < products.length; i++ )
+	{
+	    DataRecord rec = dset.getDataRecord( i );
+	    products[i] = new Product(rec);
+	}
+	return products;
+}
+}}}
 
 If you want to hide the `DataSet` interactions and instead return an Array of `Product` Objects you might create a `Product` class that takes a `DataRecord` object as a constructor object and during creation, extracts all the relevant fields from the `DataRecord` into the `Product` instance.
 
 {{{
 public class Product {
 
-	public Product(DataRecord rec) {
-		this.title = rec.get( "TITLE" );
-		this.model = rec.get( "MODEL" );
-	    this.weight = rec.get( "SHIPPING_WEIGHT" );
-	    this.manufacturer = rec.get( "MANUFACTURED_BY" );
-	}
+    public Product(DataRecord rec) {
+        this.title = rec.get( "TITLE" );
+        this.model = rec.get( "MODEL" );
+        this.weight = rec.get( "SHIPPING_WEIGHT" );
+        this.manufacturer = rec.get( "MANUFACTURED_BY" );
+    }
 
-	public String title;
-	
-	public String model;
-	
-	public Float weight;
-	
-	public String manufacturer;
+    public String title;
+    
+    public String model;
+    
+    public Float weight;
+    
+    public String manufacturer;
 
 }
 }}}
