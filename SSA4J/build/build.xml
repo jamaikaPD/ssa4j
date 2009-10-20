@@ -15,7 +15,7 @@
 
 	
 	<target name="make-dist" depends="ivy-resolve, compile, make-jar">
-		<zip destfile="${dist.dir}/${ant.project.name}-${version}.zip">
+		<zip destfile="${dist.dir}/${ant.project.name}-${version}-with-deps.zip">
 			<zipfileset dir="${dist.dir}">
 				<include name="*.jar"/>
 			</zipfileset>

@@ -1,4 +1,4 @@
-package org.ssa4j.test;
+package org.ssa4j.example.annotatted;
 
 public class Manufacturer {
 
