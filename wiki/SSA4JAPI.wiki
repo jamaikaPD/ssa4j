@@ -1,5 +1,5 @@
 #summary SSA4J API Reference
-#labels Featured,Phase-Implementation
+#labels Phase-Implementation
 
 == ScrapeSessionManager ==
 
