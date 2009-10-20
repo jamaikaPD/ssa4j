@@ -1,0 +1,51 @@
+#summary A quick start guide that demonstrates how to use SSA4J annotations
+
+== Introduction ==
+This tutorial assumes that you already have a working knowledge of the core concepts of [http://community.screen-scraper.com/documentation screen-scraper].  It expands on [http://community.screen-scraper.com/Tutorial_4_Page_1 Tutorial 4: Scraping an E-commerce Site from External Programs] to demonstrate how SSA4J is used to create an API that is easier to use and more consistent with Java.
+
+== Scraping From an External Java Program (a.k. The "Old Way")  ==
+
+Before proceeding it would be a good idea to go through [http://community.screen-scraper.com/Tutorial_2_page_1 Tutorial 2], if you haven't done so already.
+
+*NOTE* If you haven't gone through [http://community.screen-scraper.com/Tutorial_2_page_1 Tutorial 2], or don't still have the scraping session you created in it, you can download it [http://community.screen-scraper.com/files/Shopping%20Site%20(Scraping%20Session).sss here] and [http://community.screen-scraper.com/importing_and_exporting_objects import] it into screen-scraper. 
+
+... ok, now let's review how we [http://community.screen-scraper.com/invoking_screen-scraper_from_Java Invoking screen-scraper from Java].
+
+{{{
+// Generate a RemoteScrapingSession object, which 
+// acts as the driver, or interface, to screen-scraper.
+// If you're running screen-scraper on a different computer 
+// than the one the Java file resides on you'll want to 
+// modify and use the top version instead of the bottom one.
+RemoteScrapingSession remoteScrapingSession = new RemoteScrapingSession("Shopping Site");
+remoteScrapingSession.setVariable( "PAGE", "1" );
+
+// Set the variables.
+// Remember that these two top variables correspond to the POST
+// parameters we use for the "Login" scrapeable file.
+remoteScrapingSession.setVariable( "EMAIL_ADDRESS", "test@test.com" );
+remoteScrapingSession.setVariable( "PASSWORD", "testing" );
+
+// screen-scraper will use this parameter to search the products.
+remoteScrapingSession.setVariable("SEARCH","dvd");
+
+// We start screen-scraper at page 1 of the search results.
+// Note that we could have also done this in an "initialize" 
+// script within screen-scraper, which is common.
+remoteScrapingSession.setVariable( "PAGE", "1" );
+
+// Tell the session to scrape. This method call might take
+// a little while since it will need to wait for screen-scraper
+// to fully extract the data before it returns.
+remoteScrapingSession.scrape();
+
+// Get the data set that was stored by screen-scraper in a
+// session variable. This data set corresponds to the "PRODUCTS"
+// extractor pattern found under the "Details page" scrapeable
+// file.
+DataSet products = ( DataSet )remoteScrapingSession.getVariable( "PRODUCTS" );
+
+// Be sure to disconnect from the server.
+remoteScrapingSession.disconnect();
+
+}}}
