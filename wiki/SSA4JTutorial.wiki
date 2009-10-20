@@ -55,7 +55,7 @@ It is important to understand what the alternative to SSA4J is to fully apprecia
 
 Below is a good example of all that you would have to do to create a Java API around `RemoteScrapingSession` for the example above.  
 
-== ShoppingSiteScrapingSession Class ==
+== !ShoppingSiteScrapingSession Class ==
 {{{
 // This is a subclass of RemoteScrapingSession that abstracts the caller
 // from having to know anything about the underlying RemoteScrapingSession
@@ -164,7 +164,7 @@ for(Product product : session.getProducts())
 = Create a Java API for the Shopping Site using SSA4J =
 Now that you have seen everything that you would have to do normally to create a Java API around a the `RemoteScrapingSession` libraries. Lets take the same example, but this time use SSA4J.
 
-== ShoppingSiteScrapingSession Class ==
+== !ShoppingSiteScrapingSession Class ==
 Notice right away how much less code is required.  In fact, this object looks like a basic POJO.  You don't even see a single reference to the `RemoteScrapingSession` libraries anywhere.
 
 {{{
