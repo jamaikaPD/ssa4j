@@ -9,7 +9,7 @@ Before proceeding it would be a good idea to go through [http://community.screen
 
 *NOTE* If you haven't gone through [http://community.screen-scraper.com/Tutorial_2_page_1 Tutorial 2], or don't still have the scraping session you created in it, you can download it [http://community.screen-scraper.com/files/Shopping%20Site%20(Scraping%20Session).sss here] and [http://community.screen-scraper.com/importing_and_exporting_objects import] it into screen-scraper. 
 
-... ok, now let's review how we [http://community.screen-scraper.com/invoking_screen-scraper_from_Java Invoking screen-scraper from Java].
+... ok, now let's review how we [http://community.screen-scraper.com/invoking_screen-scraper_from_Java Invoking screen-scraper from Java] in a world without SSA4J.
 
 {{{
 // Generate a RemoteScrapingSession object, which 
