@@ -1,6 +1,5 @@
 #summary SSA4J Annotation Reference: @ScrapeSession
 
-= @!ScrapeSession =
 This is the top level annotation for any Class that will bind to a scrape session.
 
 || Attribute || Description ||
