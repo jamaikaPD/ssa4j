@@ -18,6 +18,7 @@ public class ShoppingSiteScrapeSession {
 }}}
 
 = @!ScrapeSessionErrors =
+This annotation enables the caller program to map session variables as error messages scraped from the page.  If present in the session, the variables are collected and thrown as a single [SSA4JAPI#ScrapeSessionException ScrapeSessionException] when a [SSA4JAPI#ScrapeSessionManager ScrapeSessionManager] completes its scrape.
 
 || Attribute || Description ||
 || value || An array of [#@ScrapeSessionError @ScrapeSessionError] ||
