@@ -3,4 +3,4 @@
 
 || *Annotation* || *Description* ||
 || [SSA4JAnnotation_ScrapeSession @ScrapeSession] || This is the top level annotation for any Class that will bind to a scrape session. ||
-|| [SSA4JAnnotation_ScrapeSessionErrors @ScrapeSessionErrors || This annotation enables the caller program to map session variables as error messages scraped from the page. ||
+|| [SSA4JAnnotation_ScrapeSessionErrors @ScrapeSessionErrors] || This annotation enables the caller program to map session variables as error messages scraped from the page. ||
