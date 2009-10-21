@@ -317,8 +317,7 @@ public abstract class ScrapeSessionManager {
 
 	@SuppressWarnings("unchecked")
 	private ScrapeSessionException processErrors(Class c, Object source, ScrapeSessionException exception) throws ScrapeException {
-		ScrapeSession cmeta = (ScrapeSession) c.getAnnotation(ScrapeSession.class);
-		ScrapeSessionError[] errors = cmeta.errors();
+		ScrapeSessionError[] errors = ((ScrapeSessionErrors)c.getAnnotation(ScrapeSessionErrors.class)).value();
 		try {
 			if (errors.length > 0) {
 				for (ScrapeSessionError emeta : errors) {

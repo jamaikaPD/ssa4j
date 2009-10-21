@@ -6,16 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Class level annontation that marks a class as being a target for
- * binding to a Scraping session.
- * 
- * @author Rodney Aiglstorfer
- *
- */
 @Documented
-@Target(value=ElementType.TYPE)
+@Target(ElementType.TYPE)
 @Retention(value=RetentionPolicy.RUNTIME)
-public @interface ScrapeSession {
-	String name();
+public @interface ScrapeSessionErrors {
+	public ScrapeSessionError[] value() default {};
 }
