@@ -5,4 +5,7 @@
 || [SSA4JAnnotation_ScrapeSession @ScrapeSession] || Top level annotation for any Class that will bind to a scrape session. ||
 || [SSA4JAnnotation_ScrapeSessionErrors @ScrapeSessionErrors] || Maps session variables as error messages scraped from the page. ||
 || [SSA4JAnnotation_ScrapeSessionCookies @ScrapeSessionCookies] || Saves a given list of session variables as persistent values that are automatically saved in a "cookie-jar" and reflected back as session variables in future calls.||
-|| [SSA4JAnnotation_ScrapeSesssionVariable @ScrapeSesssionVariable] || Defines a binding with a session variable.  || 
+|| [SSA4JAnnotation_ScrapeSesssionVariable @ScrapeSesssionVariable] || Define a binding with a session variable.  ||
+|| [SSA4JAnnotation_ScrapeDataSet @ScrapeDataSet] ||    ||
+|| [SSA4JAnnotation_ScrapeDataRecord @ScrapeDataRecord] ||    ||
+|| [SSA4JAnnotation_ScrapeScrapeDataRecordField @ScrapeDataRecordField] ||    ||
