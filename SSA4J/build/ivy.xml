@@ -5,7 +5,7 @@
 		organisation="ssa4j"
 		module="ssa4j"
 		status="release"
-		revision="0.7">
+		revision="0.7.0">
 		<description>
 		A Java API that leverages modern Java constructs like annotations
 		to produce a portable API that can data-bind to object supported 
