@@ -1,13 +1,51 @@
 #summary SSA4J Annotation Reference
 
-== @!ScrapeSession ==
+<wiki:toc max_depth="3" />
 
-== @!ScrapeSessionCookies ==
+= @!ScrapeSession =
+This is the top level annotation for any Class that will bind to a scrape session.
 
-== @!ScrapeSesssionVariable ==
+|| Attribute || Description ||
+|| name || The name of the scrape session. ||
+|| errors || An array of [#@ScrapeSessionError @ScrapeSessionError] ||
 
-== @!ScrapeDataSet ==
+== Example Basic Usage ==
+{{{
+@ScrapeSession(name="Shopping Site")
+public class ShoppingSiteScrapeSession {
+    ...
+}
+}}}
 
-== @!ScrapeDataRecord ==
+= @!ScrapeSessionErrors =
 
-== @!ScrapeDataRecordField ==
+|| Attribute || Description ||
+|| value || An array of [#@ScrapeSessionError @ScrapeSessionError] ||
+
+== @!ScrapeSessionError ==
+|| Attribute || Description ||
+|| code || An error code, can be anything ||
+|| name || Session Variable name that, if present, signals the presence of an error ||
+
+
+== Example Basic Usage ==
+{{{
+@ScrapeSession(name="Shopping Site")
+@ScrapeSessionErrors({
+    @ScrapeSessionError(code=100,name="INVALID_LOGIN"),
+    @ScrapeSessionError(code=200,name="SESSION_EXPIRED")
+})
+public class ShoppingSiteScrapeSession {
+    ...
+}
+}}}
+
+= @!ScrapeSessionCookies =
+
+= @!ScrapeSesssionVariable =
+
+= @!ScrapeDataSet =
+
+= @!ScrapeDataRecord =
+
+= @!ScrapeDataRecordField =
