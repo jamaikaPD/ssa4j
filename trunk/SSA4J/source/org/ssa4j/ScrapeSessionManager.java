@@ -317,27 +317,30 @@ public abstract class ScrapeSessionManager {
 
 	@SuppressWarnings("unchecked")
 	private ScrapeSessionException processErrors(Class c, Object source, ScrapeSessionException exception) throws ScrapeException {
-		ScrapeSessionError[] errors = ((ScrapeSessionErrors)c.getAnnotation(ScrapeSessionErrors.class)).value();
-		try {
-			if (errors.length > 0) {
-				for (ScrapeSessionError emeta : errors) {
-					String varname = emeta.name();
-					String rawText = (String) getVariable(varname);
-					if (rawText != null && rawText.trim().length() > 0) {
-						log.debug(String.format("@ScrapeSessionError (field:%s) found in ScrapeSession", varname));
-						if (exception == null) {
-							exception = new ScrapeSessionException(emeta.code(), rawText.toString());
-						} else {
-							exception.addError(emeta.code(), rawText.toString());
+		ScrapeSessionErrors errors = (ScrapeSessionErrors)c.getAnnotation(ScrapeSessionErrors.class);
+		if (errors != null) {
+			ScrapeSessionError[] errorList = errors.value();
+			try {
+				if (errorList.length > 0) {
+					for (ScrapeSessionError emeta : errorList) {
+						String varname = emeta.name();
+						String rawText = (String) getVariable(varname);
+						if (rawText != null && rawText.trim().length() > 0) {
+							log.debug(String.format("@ScrapeSessionError (field:%s) found in ScrapeSession", varname));
+							if (exception == null) {
+								exception = new ScrapeSessionException(emeta.code(), rawText.toString());
+							} else {
+								exception.addError(emeta.code(), rawText.toString());
+							}
 						}
 					}
 				}
+				
+			} catch (ScrapeException e) {
+				throw e;
+			} catch (Exception e) {
+				throw new ScrapeException(e);
 			}
-			
-		} catch (ScrapeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ScrapeException(e);
 		}
 		Class superclass = c.getSuperclass();
 		if (superclass != null && superclass.isAnnotationPresent(ScrapeSession.class)) {
