@@ -9,11 +9,6 @@
 		<path refid="ivy.libs.path"/>
 	</path>
 	
-	<taskdef name="schemagen" classname="com.sun.tools.jxc.SchemaGenTask">
-	  <classpath refid="build.classpath"/>
-	</taskdef>
-
-	
 	<target name="make-dist" depends="ivy-resolve, compile, make-jar">
 		<zip destfile="${dist.dir}/${ant.project.name}-${version}-with-deps.zip">
 			<zipfileset dir="${dist.dir}">
@@ -29,6 +24,9 @@
 	</target>
 	
 	<target name="gen-schema">
+		<taskdef name="schemagen" classname="com.sun.tools.jxc.SchemaGenTask">
+		  <classpath refid="build.classpath"/>
+		</taskdef>
 		<delete>
 			<fileset dir="schemas">
 				<include name="*.xsd"/>
