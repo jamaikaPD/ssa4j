@@ -9,7 +9,7 @@ import org.ssa4j.ScrapeSessionCookies;
 import org.ssa4j.ScrapeSessionManager;
 import org.ssa4j.ScrapeSessionVariable;
 
-@ScrapeSessionCookies(cookies = { @ScrapeSessionCookie("zenid") })
+@ScrapeSessionCookies({ @ScrapeSessionCookie("zenid") })
 @ScrapeSession(name = "Shopping Site")
 public class ShoppingSiteScrapingSession {
 
