@@ -1,4 +1,5 @@
 #summary SSA4J Annotation Reference
+#labels Featured
 
 <wiki:toc max_depth="3" />
 
@@ -46,14 +47,19 @@ This annotation enables the caller program to selectively save a given list of s
 
 *NOTE:* These annotations are designed to work in concert with the [SSA4JAPI#ScrapeSessionManager ScrapeSessionManager.scrape(source, listener, cookiejar)]
 
+== Example Basic Usage ==
 {{{
-@ScrapeSessionCookies(cookies = { @ScrapeSessionCookie("zenid") })
+@ScrapeSessionCookies({ 
+    @ScrapeSessionCookie("zenid") 
+})
 public class ShoppingSiteScrapingSession {
     ...
 }
 }}}
 
 = @!ScrapeSesssionVariable =
+
+
 
 = @!ScrapeDataSet =
 
