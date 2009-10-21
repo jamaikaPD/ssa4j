@@ -1,0 +1,18 @@
+#summary SSA4J Annotation Reference: @ScrapeSession
+
+<wiki:toc max_depth="3" />
+
+= Introduction =
+This is the top level annotation for any Class that will bind to a scrape session.
+
+|| Attribute || Description ||
+|| name || The name of the scrape session. ||
+|| errors || An array of [#@ScrapeSessionError @ScrapeSessionError] ||
+
+= Example: Basic Usage =
+{{{
+@ScrapeSession(name="Shopping Site")
+public class ShoppingSiteScrapeSession {
+    ...
+}
+}}}
