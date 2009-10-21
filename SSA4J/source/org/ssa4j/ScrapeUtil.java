@@ -49,6 +49,15 @@ public class ScrapeUtil {
 				value = source.toString();
 		} 
 		//
+		// Convert to Boolean?
+		//
+		else if (instanceOf(targetClass, Boolean.class)) {
+			if (source.equalsIgnoreCase("true") || source.equalsIgnoreCase("yes"))
+				value = Boolean.TRUE;
+			else
+				value = Boolean.FALSE;
+		} 
+		//
 		// Convert to Custom?
 		//
 		else {
