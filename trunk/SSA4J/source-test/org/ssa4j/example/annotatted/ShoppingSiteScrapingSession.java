@@ -1,6 +1,5 @@
 package org.ssa4j.example.annotatted;
 
-import org.ssa4j.ProfessionalScrapeSessionManager;
 import org.ssa4j.ScrapeDataSet;
 import org.ssa4j.ScrapeException;
 import org.ssa4j.ScrapeSession;
@@ -8,6 +7,7 @@ import org.ssa4j.ScrapeSessionCookie;
 import org.ssa4j.ScrapeSessionCookies;
 import org.ssa4j.ScrapeSessionManager;
 import org.ssa4j.ScrapeSessionVariable;
+import org.ssa4j.mock.MockScrapeSessionManager;
 
 @ScrapeSessionCookies({ @ScrapeSessionCookie("zenid") })
 @ScrapeSession(name = "Shopping Site")
@@ -56,7 +56,7 @@ public class ShoppingSiteScrapingSession {
 			session.setSearchKeyWord("dvd");
 			session.setPage(1);
 			
-			ScrapeSessionManager manager = new ProfessionalScrapeSessionManager();
+			ScrapeSessionManager manager = new MockScrapeSessionManager();
 			manager.scrape(session);
 			
 			for (Product product : session.getProducts()) {

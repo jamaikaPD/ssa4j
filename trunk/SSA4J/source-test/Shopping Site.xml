@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ssa4j:mocksession xmlns:ssa4j="http://schemas.mobuser.com/ssa4jmock" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://schemas.mobuser.com/ssa4jmock ../schemas/ssa4jmock.xsd " id="Shopping Site">
+	xsi:schemaLocation="http://ssa4j.googlecode.com/files/ssa4jmock-0.7.0.xsd" id="Shopping Site">
 	<scenario>
 
 		<test>
@@ -50,7 +50,23 @@
 				<field name="MODEL">DVD-DHWV</field>
 				<field name="SHIPPING_WEIGHT">7.00</field>
 				<field name="MANUFACTURED_BY">Fox</field>
-			</datarecord> 
+			</datarecord>
+		</dataset>
+
+	</scenario>
+	<scenario>
+
+		<test>
+		<![CDATA[
+		return session.page == 2;
+		]]>
+		</test>
+		
+		<variables>
+			<variable name="zenid">2DFS3423SEAAFE3487</variable>
+		</variables>
+
+		<dataset id="PRODUCTS"> 
 			<datarecord>
 				<field name="TITLE">Fire Down Below</field>
 				<field name="MODEL">DVD-FDBL</field>
@@ -87,6 +103,22 @@
 				<field name="SHIPPING_WEIGHT">7.00</field>
 				<field name="MANUFACTURED_BY">Fox</field>
 			</datarecord> 
+		</dataset>
+
+	</scenario>
+		<scenario>
+
+		<test>
+		<![CDATA[
+		return session.page == 3;
+		]]>
+		</test>
+		
+		<variables>
+			<variable name="zenid">2DFS3423SEAAFE3487</variable>
+		</variables>
+
+		<dataset id="PRODUCTS"> 
 			<datarecord>
 				<field name="TITLE">The Matrix</field>
 				<field name="MODEL">DVD-MATR</field>
@@ -126,6 +158,5 @@
 		</dataset>
 
 	</scenario>
-
 
 </ssa4j:mocksession>
