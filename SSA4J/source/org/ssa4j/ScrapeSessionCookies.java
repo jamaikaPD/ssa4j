@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Target(value=ElementType.TYPE)
 @Retention(value=RetentionPolicy.RUNTIME)
 public @interface ScrapeSessionCookies {
-	public ScrapeSessionCookie[] cookies() default {};
+	public ScrapeSessionCookie[] value() default {};
 }

@@ -237,7 +237,7 @@ public abstract class ScrapeSessionManager {
 				if (c.isAnnotationPresent(ScrapeSessionCookies.class)) {
 					ScrapeSessionCookies meta = 
 						(ScrapeSessionCookies) c.getAnnotation(ScrapeSessionCookies.class);
-					for (ScrapeSessionCookie cookieMeta : meta.cookies()) {
+					for (ScrapeSessionCookie cookieMeta : meta.value()) {
 						log.info("Reading Cookies ...");
 						String name = cookieMeta.value();
 						String value = this.getVariable(name);
