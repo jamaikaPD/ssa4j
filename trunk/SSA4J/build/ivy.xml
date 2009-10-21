@@ -26,7 +26,9 @@
 			description="Additional configuraiton for testing ssa4j"/>
 	</configurations>
 	<publications>
-		<artifact name="ssa4j" ext="jar" type="jar" conf="professional"/>
+		<artifact name="ssa4j" ext="jar" type="jar" conf="enterprise"/>
+		<artifact name="ssa4j-with-deps" ext="zip" type="zip" conf="enterprise"/>
+		<artifact name="ssa4jmock" ext="xsd" type="schemas" conf="enterprise"/>
 	</publications>
 	<dependencies>
 					

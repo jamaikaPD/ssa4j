@@ -1,7 +1,7 @@
 <project name="ssa4j" basedir=".." default="make-dist">
 
-	<property name="version" value="0.7.0" />
-	<property name="jar.name" value="${ant.project.name}-${version}.jar" />
+	<property name="jar.name" value="${ant.project.name}.jar" />
+	<property name="ivy.publish.resolver" value="ssa4j_snapshots" />
 
 	<import file="../../Shared/build-common.xml" />
 		
@@ -10,7 +10,7 @@
 	</path>
 	
 	<target name="make-dist" depends="ivy-resolve, compile, make-jar">
-		<zip destfile="${dist.dir}/${ant.project.name}-${version}-with-deps.zip">
+		<zip destfile="${dist.dir}/${ant.project.name}-with-deps.zip">
 			<zipfileset dir="${dist.dir}">
 				<include name="*.jar"/>
 			</zipfileset>
@@ -21,6 +21,8 @@
 				<include name="*.ivy"/>
 			</zipfileset>
 		</zip>
+		
+		<copy file="schemas/ssa4jmock.xsd" todir="${dist.dir}"/>
 	</target>
 	
 	<target name="gen-schema">
