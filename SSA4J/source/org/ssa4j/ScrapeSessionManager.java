@@ -295,7 +295,7 @@ public abstract class ScrapeSessionManager {
 						String varname = meta.name();
 						String value = getVariable(varname);
 						if (value != null) {
-							f.set(source, ScrapeUtil.convert(f.getType(), meta.name(), meta.format(), value));
+							f.set(source, ScrapeUtil.convert(f.getType(), meta.name(), meta.format(), value.trim()));
 						}
 					}
 				} else {

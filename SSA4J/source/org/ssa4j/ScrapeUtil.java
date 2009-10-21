@@ -93,7 +93,7 @@ public class ScrapeUtil {
 						String key = field.name();
 						String value = (String) rec.get(key);
 						if (value != null) {
-							m.invoke(obj, convert(m.getParameterTypes()[0], field.name(), field.format(), value));
+							m.invoke(obj, convert(m.getParameterTypes()[0], field.name(), field.format(), value.trim()));
 						}
 					} catch (Exception e) {
 						throw new Exception("Problem with method: " + m.getName(), e);
@@ -109,7 +109,7 @@ public class ScrapeUtil {
 						String key = field.name();
 						String value = (String) rec.get(key);
 						if (value != null) {
-							f.set(obj, convert(f.getType(), field.name(), field.format(), value));
+							f.set(obj, convert(f.getType(), field.name(), field.format(), value.trim()));
 						}
 					} catch (Exception e) {
 						throw new Exception("Problem with field: " + f.getName(), e);
