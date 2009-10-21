@@ -1,8 +1,5 @@
 #summary SSA4J Annotation Reference: @ScrapeSession
 
-<wiki:toc max_depth="3" />
-
-= Introduction =
 This is the top level annotation for any Class that will bind to a scrape session.
 
 || Attribute || Description ||
