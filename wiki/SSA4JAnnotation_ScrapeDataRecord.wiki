@@ -1,0 +1,11 @@
+#summary SSA4J Annotation Reference: @ScrapeData
+This annotation is used to identify a POJO as being able to bind to a [http://community.screen-scraper.com/API/DataRecord DataRecord].  It doesn't take any attributes.
+
+== Example: Basic Usage ==
+
+{{{
+@ScrapeDataRecord
+public class Product {
+...
+}
+}}}
