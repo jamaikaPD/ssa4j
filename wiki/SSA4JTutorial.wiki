@@ -18,7 +18,7 @@ Before proceeding it would be a good idea to go through [http://community.screen
 RemoteScrapingSession remoteScrapingSession = new RemoteScrapingSession("Shopping Site");
 remoteScrapingSession.setVariable( "EMAIL_ADDRESS", "test@test.com" );
 remoteScrapingSession.setVariable( "PASSWORD", "testing" );
-remoteScrapingSession.setVariable("SEARCH","dvd");
+remoteScrapingSession.setVariable( "SEARCH","dvd");
 remoteScrapingSession.setVariable( "PAGE", "1" );
 
 remoteScrapingSession.scrape();
@@ -85,7 +85,7 @@ public class ShoppingSiteScrapingSession {
         session.setVariable( "PASSWORD",  password );
     }
     public void setSearchKeyWord(String searchKeyWord) throws RemoteScrapingSessionException {
-        session.setVariable("SEARCH", searchKeyWord );
+        session.setVariable( "SEARCH", searchKeyWord );
     }
     public void setPage(int page) throws RemoteScrapingSessionException {
         session.setVariable( "PAGE", Integer.toString(page));
