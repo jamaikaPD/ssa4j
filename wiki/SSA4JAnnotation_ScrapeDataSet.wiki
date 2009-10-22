@@ -1,0 +1,2 @@
+#summary SSA4J Annotation Reference: @ScrapeDataSet
+Indicates that a member variable or a setter binds to a [http://community.screen-scraper.com/API/DataSet DataSet].
