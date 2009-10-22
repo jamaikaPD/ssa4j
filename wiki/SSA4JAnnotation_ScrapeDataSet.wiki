@@ -1,2 +1,35 @@
 #summary SSA4J Annotation Reference: @ScrapeDataSet
-Indicates that a member variable or a setter binds to a [http://community.screen-scraper.com/API/DataSet DataSet].
+This annotation can be used on either an field in the session class or on a setter methodto bind to a [http://community.screen-scraper.com/API/DataSet DataSet] in a scrape session.
+
+*IMPORTANT* This annotation MUST be used with an Array of Classes that are also annotated with the [SSA4JAnnotation_ScrapeDataRecord @ScrapeDataRecord] annotation.
+
+== Example 1: Basic Usage on a Member Field ==
+
+{{{
+@ScrapeSession("Shopping Site")
+public class ShoppingSiteScrapeSession {
+
+   @ScrapeDataSet("PRODUCTS")
+   public Product[] products;
+
+}
+
+}}}
+
+== Example 2: Basic Usage on a Setter Method ==
+
+{{{
+@ScrapeSession("Shopping Site")
+public class ShoppingSiteScrapeSession {
+
+   
+   protected Product[] products;
+
+   @ScrapeDataSet("PRODUCTS")
+   public void setProducts(Product[] products) {
+      this.products = products;
+   }
+
+}
+
+}}}
