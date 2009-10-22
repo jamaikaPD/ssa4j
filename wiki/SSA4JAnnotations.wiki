@@ -6,6 +6,6 @@
 || [SSA4JAnnotation_ScrapeSessionErrors @ScrapeSessionErrors] || Maps session variables as error messages scraped from the page. ||
 || [SSA4JAnnotation_ScrapeSessionCookies @ScrapeSessionCookies] || Saves a given list of session variables as persistent values that are automatically saved in a "cookie-jar" and reflected back as session variables in future calls.||
 || [SSA4JAnnotation_ScrapeSesssionVariable @ScrapeSesssionVariable] || Define a binding with a session variable.  ||
-|| [SSA4JAnnotation_ScrapeDataSet @ScrapeDataSet] || Used on either an field in the session class or on a setter methodto bind to a !DataSet in a scrape session.   ||
+|| [SSA4JAnnotation_ScrapeDataSet @ScrapeDataSet] || Used on either a field or setter method to bind to a !DataSet in a scrape session.   ||
 || [SSA4JAnnotation_ScrapeDataRecord @ScrapeDataRecord] ||  Used to identify a POJO as being able to bind to a !DataRecord.  ||
 || [SSA4JAnnotation_ScrapeScrapeDataRecordField @ScrapeDataRecordField] ||    ||
