@@ -1,5 +1,6 @@
 #summary SSA4J Annotation Reference: @ScrapeDataSet
-This annotation can be used on either an field in the session class or on a setter methodto bind to a [http://community.screen-scraper.com/API/DataSet DataSet] in a scrape session.
+
+This annotation can be used on either a field or setter method to bind to a [http://community.screen-scraper.com/API/DataSet DataSet] in a scrape session.
 
 *IMPORTANT* This annotation MUST be used with an Array of Classes that are also annotated with the [SSA4JAnnotation_ScrapeDataRecord @ScrapeDataRecord] annotation.
 
