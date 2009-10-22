@@ -213,8 +213,8 @@ public class ShoppingSiteScrapingSession {
 == Product Class (Annotated) ==
 Notice again the complete absence of any reference to the `RemoteScrapingSession` libraries.  In particular there is no trace of `DataRecord` anywhere.
 {{{
-@ScrapeSession(name = "Shopping Site")
-public class ShoppingSiteScrapingSession {
+@ScrapeDataRecord
+public class Product {
 
     @ScrapeDataRecordField(name="TITLE")
     private String title;
@@ -266,6 +266,5 @@ for (Product product : session.getProducts()) {
     System.out.println("Shipping Weight: " + product.getWeight());
     System.out.println("Manufactured By: "+ product.getManufacturer());
     System.out.println("==============");
-}   
-    
+}      
 }}}
