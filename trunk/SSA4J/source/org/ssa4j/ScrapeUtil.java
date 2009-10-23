@@ -24,7 +24,7 @@ public class ScrapeUtil {
 		return c1 == c2;
 	}
 	
-	public static Object convert(Class<?> targetClass, String name, String sformat, String source) throws Exception {
+	public static Object convert(Class<?> targetClass, String sformat, String source) throws Exception {
 		Object value = null;
 		//
 		// Convert to Calendar?
@@ -93,7 +93,7 @@ public class ScrapeUtil {
 						String key = field.name();
 						String value = (String) rec.get(key);
 						if (value != null) {
-							m.invoke(obj, convert(m.getParameterTypes()[0], field.name(), field.format(), value.trim()));
+							m.invoke(obj, convert(m.getParameterTypes()[0], field.format(), value.trim()));
 						}
 					} catch (Exception e) {
 						throw new Exception("Problem with method: " + m.getName(), e);
@@ -109,7 +109,7 @@ public class ScrapeUtil {
 						String key = field.name();
 						String value = (String) rec.get(key);
 						if (value != null) {
-							f.set(obj, convert(f.getType(), field.name(), field.format(), value.trim()));
+							f.set(obj, convert(f.getType(), field.name(), value.trim()));
 						}
 					} catch (Exception e) {
 						throw new Exception("Problem with field: " + f.getName(), e);
@@ -122,10 +122,20 @@ public class ScrapeUtil {
 		return null;
 	}
 
-	private static boolean isSetter(Method method) {
+	public static boolean isSetter(Method method) {
 		if (!method.getName().startsWith("set"))
 			return false;
 		if (method.getParameterTypes().length != 1)
+			return false;
+		return true;
+	}
+	
+	public static boolean isGetter(Method method) {
+		if (!method.getName().startsWith("get"))
+			return false;
+		if (method.getParameterTypes().length != 0)
+			return false;
+		if (method.getReturnType() != void.class)
 			return false;
 		return true;
 	}

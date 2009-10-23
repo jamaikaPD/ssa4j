@@ -14,15 +14,14 @@ import java.lang.annotation.Target;
  *
  */
 @Documented
-@Target(value=ElementType.FIELD)
+@Target(value={ElementType.FIELD, ElementType.METHOD})
 @Retention(value=RetentionPolicy.RUNTIME)
 public @interface ScrapeSessionVariable {
 	enum BindType {
 		Read,
-		Write,
-		ReadWrite
+		Write
 	}
 	String name();
 	String format() default "";
-	BindType bindtype() default BindType.Write;
+	BindType[] bindtype() default {BindType.Write};
 }
