@@ -2,11 +2,15 @@ package org.ssa4j;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.xml.ws.BindingType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.ssa4j.ScrapeSessionVariable.BindType;
 import org.ssa4j.mock.MockScrapeSessionManager;
 
 import com.screenscraper.common.DataRecord;
@@ -170,18 +174,26 @@ public abstract class ScrapeSessionManager {
 				f.setAccessible(true);
 				if (f.isAnnotationPresent(ScrapeSessionVariable.class)) {
 					ScrapeSessionVariable meta = f.getAnnotation(ScrapeSessionVariable.class);
-					switch(meta.bindtype()) {
-					case ReadWrite:
-					case Write:
-						String varname = meta.name();
-						Object value = f.get(source);
-					
-						if (value != null) {
-							if (meta.format().length() > 0)
-								setVariable(varname, String.format(meta.format(), value));	
-							else 
-								setVariable(varname, value.toString());	
+					for(BindType bindtype : meta.bindtype()) {
+						if (bindtype == BindType.Write) {
+							String varname = meta.name();
+							Object value = f.get(source);
+						
+							if (value != null) {
+								setVariable(varname, value.toString());			
+							}
 						}
+					}
+				}
+			}
+			for (Method m : c.getDeclaredMethods()) {
+				m.setAccessible(true);
+				if (m.isAnnotationPresent(ScrapeSessionVariable.class) && ScrapeUtil.isGetter(m)) {
+					ScrapeSessionVariable meta = m.getAnnotation(ScrapeSessionVariable.class);
+					String varname = meta.name();
+					Object value = m.invoke(source);
+					if (value != null) {
+						setVariable(varname, value.toString());
 					}
 				}
 			}
@@ -289,17 +301,31 @@ public abstract class ScrapeSessionManager {
 				} else if (f.isAnnotationPresent(ScrapeSessionVariable.class)) {
 					log.debug(String.format("@ScrapeSessionVariable (field:%s)", f.getName()));
 					ScrapeSessionVariable meta = f.getAnnotation(ScrapeSessionVariable.class);
-					switch(meta.bindtype()) {
-					case ReadWrite:
-					case Read:
-						String varname = meta.name();
-						String value = getVariable(varname);
-						if (value != null) {
-							f.set(source, ScrapeUtil.convert(f.getType(), meta.name(), meta.format(), value.trim()));
+					for(BindType bindtype : meta.bindtype()) {
+						if (bindtype == BindType.Read) {
+							String varname = meta.name();
+							String value = getVariable(varname);
+							if (value != null) {
+								f.set(source, 
+									ScrapeUtil.convert(f.getType(), meta.format(), value.trim()));
+							}
 						}
 					}
 				} else {
 					log.debug(String.format("No Annotations (field:%s)", f.getName()));
+				}
+			}
+			
+			for (Method m : c.getDeclaredMethods()) {
+				m.setAccessible(true);
+				if (m.isAnnotationPresent(ScrapeSessionVariable.class) && ScrapeUtil.isSetter(m)) {
+					ScrapeSessionVariable meta = m.getAnnotation(ScrapeSessionVariable.class);
+					String varname = meta.name();
+					String value = getVariable(varname);
+					if (value != null) {
+						m.invoke(source, 
+							ScrapeUtil.convert(m.getParameterTypes()[0], meta.format(), value.trim()));
+					}
 				}
 			}
 			
