@@ -6,16 +6,12 @@ import org.ssa4j.ScrapeDataRecordField;
 @ScrapeDataRecord
 public class Product {
 
-	@ScrapeDataRecordField(name="TITLE")
 	private String title;
 	
-	@ScrapeDataRecordField(name="MODEL")
 	private String model;
 	
-	@ScrapeDataRecordField(name="SHIPPING_WEIGHT")
 	private String weight;
 
-	@ScrapeDataRecordField(name="MANUFACTURED_BY")
 	private String manufacturer;
 
 	public String getTitle() {
@@ -32,5 +28,24 @@ public class Product {
 	public String getManufacturer() {
 		return manufacturer;
 	}
+
+	@ScrapeDataRecordField(name="TITLE")
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	@ScrapeDataRecordField(name="MODEL")
+	public void setModel(String model) {
+		this.model = model;
+	}
+	@ScrapeDataRecordField(name="SHIPPING_WEIGHT")
+	public void setWeight(String weight) {
+		this.weight = weight;
+	}
+	@ScrapeDataRecordField(name="MANUFACTURED_BY")
+	public void setManufacturer(String manufacturer) {
+		this.manufacturer = manufacturer;
+	}
+	
+	
 
 }

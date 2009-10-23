@@ -1,7 +1,9 @@
 package org.ssa4j.example.annotatted;
 
+import java.io.File;
+
+import org.ssa4j.EnterpriseScrapeScriptDeployer;
 import org.ssa4j.ScrapeDataSet;
-import org.ssa4j.ScrapeException;
 import org.ssa4j.ScrapeSession;
 import org.ssa4j.ScrapeSessionCookie;
 import org.ssa4j.ScrapeSessionCookies;
@@ -13,22 +15,40 @@ import org.ssa4j.mock.MockScrapeSessionManager;
 @ScrapeSession(name = "Shopping Site")
 public class ShoppingSiteScrapingSession {
 
-	@ScrapeSessionVariable(name = "EMAIL_ADDRESS")
 	protected String email;
 
-	@ScrapeSessionVariable(name = "PASSWORD")
 	protected String password;
 	
-	@ScrapeSessionVariable(name = "SEARCH")
 	protected String searchKeyWord;
 	
-	@ScrapeSessionVariable(name = "PAGE")
 	protected Integer page;
 
 	@ScrapeDataSet("PRODUCTS")
 	protected Product[] products;
 	
 	
+	@ScrapeSessionVariable(name = "EMAIL_ADDRESS")
+	public String getEmail() {
+		return email;
+	}
+
+	@ScrapeSessionVariable(name = "PASSWORD")
+	public String getPassword() {
+		return password;
+	}
+
+	@ScrapeSessionVariable(name = "SEARCH")
+	public String getSearchKeyWord() {
+		return searchKeyWord;
+	}
+
+	@ScrapeSessionVariable(name = "PAGE")
+	public Integer getPage() {
+		return page;
+	}
+	
+	
+
 	public void setEmailAddress(String email) {
 		this.email = email;
 	}
@@ -48,8 +68,13 @@ public class ShoppingSiteScrapingSession {
 		return products;
 	}
 	
+	
+	
 	public static void main(String[] args) {
 		try {
+			EnterpriseScrapeScriptDeployer deployer = new EnterpriseScrapeScriptDeployer();
+			deployer.deploy(new File("scraper/Shopping Site (Scraping Session).sss"));
+			
 			ShoppingSiteScrapingSession session = new ShoppingSiteScrapingSession();
 			session.setEmailAddress("test@test.com");
 			session.setPassword("testing");
@@ -68,7 +93,7 @@ public class ShoppingSiteScrapingSession {
 						+ product.getManufacturer());
 				System.out.println("==============");
 			}
-		} catch (ScrapeException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
