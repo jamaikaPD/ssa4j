@@ -8,4 +8,4 @@
 || [SSA4JAnnotation_ScrapeSesssionVariable @ScrapeSesssionVariable] || Define a binding with a session variable.  ||
 || [SSA4JAnnotation_ScrapeDataSet @ScrapeDataSet] || Used on either a field or setter method to bind to a !DataSet in a scrape session.   ||
 || [SSA4JAnnotation_ScrapeDataRecord @ScrapeDataRecord] ||  Used to identify a POJO as being able to bind to a !DataRecord.  ||
-|| [SSA4JAnnotation_ScrapeScrapeDataRecordField @ScrapeDataRecordField] ||    ||
+|| [SSA4JAnnotation_ScrapeScrapeDataRecordField @ScrapeDataRecordField] || Used to bind a member variable or setter method to a field of a !DataRecord   ||
