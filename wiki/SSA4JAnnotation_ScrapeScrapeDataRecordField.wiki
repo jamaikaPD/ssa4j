@@ -23,7 +23,7 @@ public class Product {
 
   @ScrapeDataRecordField(name="MANUFACTURED_BY")
   public String manufacturer;
-
+}
 }}}
 
 == Example: Annotating a Setter Method ==
