@@ -109,7 +109,7 @@ public class ScrapeUtil {
 						String key = field.name();
 						String value = (String) rec.get(key);
 						if (value != null) {
-							f.set(obj, convert(f.getType(), field.name(), value.trim()));
+							f.set(obj, convert(f.getType(), field.format(), value.trim()));
 						}
 					} catch (Exception e) {
 						throw new Exception("Problem with field: " + f.getName(), e);
