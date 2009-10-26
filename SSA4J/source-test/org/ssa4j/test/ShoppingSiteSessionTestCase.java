@@ -10,12 +10,12 @@ import junit.framework.TestCase;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.ssa4j.EnterpriseScrapeSessionManager;
-import org.ssa4j.ProfessionalScrapeSessionManager;
 import org.ssa4j.ScrapeSessionManager;
+import org.ssa4j.enterprise.EnterpriseScrapeSessionManager;
 import org.ssa4j.example.annotatted.Product;
 import org.ssa4j.example.annotatted.ShoppingSiteScrapingSession;
 import org.ssa4j.mock.MockScrapeSessionManager;
+import org.ssa4j.professional.ProfessionalScrapeSessionManager;
 
 import com.screenscraper.common.DataSet;
 import com.screenscraper.scraper.RemoteScrapingSession;
