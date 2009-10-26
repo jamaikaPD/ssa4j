@@ -8,9 +8,9 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import org.junit.Test;
-import org.ssa4j.EnterpriseScrapeScriptDeployer;
-import org.ssa4j.ProfessionalScrapeScriptDeployer;
 import org.ssa4j.ScrapeScriptDeployer;
+import org.ssa4j.enterprise.EnterpriseScrapeScriptDeployer;
+import org.ssa4j.professional.ProfessionalScrapeScriptDeployer;
 
 import com.screenscraper.soapclient.SOAPInterface;
 import com.screenscraper.soapclient.SOAPInterfaceService;

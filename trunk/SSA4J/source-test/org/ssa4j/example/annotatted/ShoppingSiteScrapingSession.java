@@ -2,13 +2,13 @@ package org.ssa4j.example.annotatted;
 
 import java.io.File;
 
-import org.ssa4j.EnterpriseScrapeScriptDeployer;
 import org.ssa4j.ScrapeDataSet;
 import org.ssa4j.ScrapeSession;
 import org.ssa4j.ScrapeSessionCookie;
 import org.ssa4j.ScrapeSessionCookies;
 import org.ssa4j.ScrapeSessionManager;
 import org.ssa4j.ScrapeSessionVariable;
+import org.ssa4j.enterprise.EnterpriseScrapeScriptDeployer;
 import org.ssa4j.mock.MockScrapeSessionManager;
 
 @ScrapeSessionCookies({ @ScrapeSessionCookie("zenid") })
