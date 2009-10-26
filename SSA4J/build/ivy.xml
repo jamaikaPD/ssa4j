@@ -15,16 +15,14 @@
 	<configurations defaultconfmapping="default->professional">
 		<conf name="core"/>
 		
-		<conf name="professional" extends="core"
+		<conf name="professional"
 			description="For use with the Professional version of the screen-scraper project"/>
 			
-		<conf name="enterprise" extends="core"
+		<conf name="enterprise"
 			description="For use with the Enterprise version of the screen-scraper project"/>
 			
-		<conf name="mock" extends="core"
+		<conf name="mock"
 			description="Additional configuration for the ssa4j 'mock' framework"/>
-			
-		<conf name="complete" extends="enterprise, professional, mock"/>
 			
 		<conf name="test"
 			description="Additional configuraiton for testing ssa4j"/>
@@ -34,7 +32,7 @@
 		<artifact name="ssa4j-pro" ext="jar" type="jar" conf="core"/>
 		<artifact name="ssa4j-ent" ext="jar" type="jar" conf="core"/>
 		<artifact name="ssa4j-mock" ext="jar" type="jar" conf="mock"/>
-		<artifact name="ssa4j-mock" ext="xsd" type="schema" conf="mock"/>
+		<artifact name="ssa4jmock" ext="xsd" type="schema" conf="mock"/>
 	</publications>
 	<dependencies>
 	

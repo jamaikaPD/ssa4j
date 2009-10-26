@@ -4,38 +4,63 @@
 	<property name="ivy.publish.resolver" value="ssa4j_snapshots" />
 
 	<import file="../../Shared/build-common.xml" />
-		
+
 	<path id="build.classpath">
-		<path refid="ivy.libs.path"/>
+		<path refid="ivy.libs.path" />
 	</path>
-	
-	<target name="make-dist" depends="ivy-resolve, compile, make-jar">
+
+	<target name="make-dist" depends="ivy-resolve, compile, make-jars">
 		<zip destfile="${dist.dir}/${ant.project.name}-with-deps.zip">
 			<zipfileset dir="${dist.dir}">
-				<include name="*.jar"/>
+				<include name="*.jar" />
 			</zipfileset>
 			<zipfileset dir="${basedir}">
-				<include name="${lib.dir}/**/*.jar"/>
+				<include name="${lib.dir}/**/*.jar" />
 			</zipfileset>
 			<zipfileset dir="${build.dir}">
-				<include name="*.ivy"/>
+				<include name="*.ivy" />
 			</zipfileset>
 		</zip>
-		
-		<copy file="schemas/ssa4jmock.xsd" todir="${dist.dir}"/>
+
+		<copy file="schemas/ssa4jmock.xsd" todir="${dist.dir}" />
 	</target>
-	
+
+	<target name="make-jars">
+		<delete dir="${dist.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<jar jarfile="${dist.dir}/ssa4j-core.jar" update="false">
+			<fileset dir="${classes.dir}">
+				<include name="org/ssa4j/*.class" />
+			</fileset>
+		</jar>
+		<jar jarfile="${dist.dir}/ssa4j-pro.jar" update="false">
+			<fileset dir="${classes.dir}">
+				<include name="org/ssa4j/propessional/**/*.class" />
+			</fileset>
+		</jar>
+		<jar jarfile="${dist.dir}/ssa4j-ent.jar" update="false">
+			<fileset dir="${classes.dir}">
+				<include name="org/ssa4j/enterprise/**/*.class" />
+			</fileset>
+		</jar>
+		<jar jarfile="${dist.dir}/ssa4j-mock.jar" update="false">
+			<fileset dir="${classes.dir}">
+				<include name="org/ssa4j/mock/**/*.class" />
+			</fileset>
+		</jar>
+	</target>
+
 	<target name="gen-schema">
 		<taskdef name="schemagen" classname="com.sun.tools.jxc.SchemaGenTask">
-		  <classpath refid="build.classpath"/>
+			<classpath refid="build.classpath" />
 		</taskdef>
 		<delete>
 			<fileset dir="schemas">
-				<include name="*.xsd"/>
+				<include name="*.xsd" />
 			</fileset>
 		</delete>
 		<schemagen destdir="schemas" srcdir="${source.dir}/org/ssa4j/mock/schema">
-			<schema namespace="http://schemas.mobuser.com/ssa4jmock" file="ssa4jmock.xsd"/>
+			<schema namespace="http://schemas.mobuser.com/ssa4jmock" file="ssa4jmock.xsd" />
 		</schemagen>
 
 	</target>
