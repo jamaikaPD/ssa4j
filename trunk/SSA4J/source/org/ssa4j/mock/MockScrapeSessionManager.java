@@ -51,7 +51,7 @@ public class MockScrapeSessionManager extends ScrapeSessionManager {
 	private File scenarioDirectory;
 	
 	public MockScrapeSessionManager() {
-		scenarioDirectory = new File(System.getProperty(ScrapeConstants.SS_MOCKDIR_KEY, "."));
+		scenarioDirectory = new File(System.getProperty(ScrapeConstants.SSA4J_MOCKDIR_KEY, "."));
 		log.info("Repository for mock session scenarios set to " + scenarioDirectory.getAbsolutePath());
 	}
 	
