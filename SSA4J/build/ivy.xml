@@ -13,30 +13,59 @@
 		</description>
 	</info>
 	<configurations defaultconfmapping="default->professional">
-		<conf name="professional" 
+		<conf name="core"/>
+		
+		<conf name="professional" extends="core"
 			description="For use with the Professional version of the screen-scraper project"/>
 			
-		<conf name="enterprise" extends="professional"
+		<conf name="enterprise" extends="core"
 			description="For use with the Enterprise version of the screen-scraper project"/>
 			
-		<conf name="mock"
+		<conf name="mock" extends="core"
 			description="Additional configuration for the ssa4j 'mock' framework"/>
+			
+		<conf name="complete" extends="enterprise, professional, mock"/>
 			
 		<conf name="test"
 			description="Additional configuraiton for testing ssa4j"/>
 	</configurations>
 	<publications>
-		<artifact name="ssa4j" ext="jar" type="jar" conf="enterprise"/>
-		<artifact name="ssa4j-with-deps" ext="zip" type="zip" conf="enterprise"/>
-		<artifact name="ssa4jmock" ext="xsd" type="schemas" conf="enterprise"/>
+		<artifact name="ssa4j-core" ext="jar" type="jar" conf="core"/>
+		<artifact name="ssa4j-pro" ext="jar" type="jar" conf="core"/>
+		<artifact name="ssa4j-ent" ext="jar" type="jar" conf="core"/>
+		<artifact name="ssa4j-mock" ext="jar" type="jar" conf="mock"/>
+		<artifact name="ssa4j-mock" ext="xsd" type="schema" conf="mock"/>
 	</publications>
 	<dependencies>
+	
+		<!-- Testing Dependencies -->
 					
 		<dependency org="junit" 
 					name="junit" 
 					rev="4.6" 
 					conf="test->default"/>
 		
+
+		<!-- Core Dependencies -->
+					
+		<dependency org="slf4j" 
+					name="slf4j-api" 
+					rev="1.5.6"
+					conf="core->default"/>
+					
+		<dependency org="slf4j" 
+					name="slf4j-log4j12" 
+					rev="1.5.6"
+					conf="core->default"/>
+					
+
+		<dependency org="screen-scraper" 
+					name="java-api" 
+					rev="4.5" 
+					conf="core->default"/>
+
+		<!-- Mock Dependencies -->
+							
 		<dependency org="codehaus" 
 					name="groovy-all" 
 					rev="1.6.3"
@@ -46,21 +75,6 @@
 					name="jaxb" 
 					rev="2.1"
 					conf="mock->default"/>
-					
-		<dependency org="slf4j" 
-					name="slf4j-api" 
-					rev="1.5.6"
-					conf="professional->default"/>
-					
-		<dependency org="slf4j" 
-					name="slf4j-log4j12" 
-					rev="1.5.6"
-					conf="professional->default"/>
-
-		<dependency org="screen-scraper" 
-					name="java-api" 
-					rev="4.5" 
-					conf="professional->default"/>
 
 		<!--  SOAP Client Dependencies -->
 					
