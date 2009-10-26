@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ssa4j.ScrapeSessionVariable.BindType;
-import org.ssa4j.mock.MockScrapeSessionManager;
 
 import com.screenscraper.common.DataRecord;
 
@@ -27,7 +26,17 @@ import com.screenscraper.common.DataRecord;
 public abstract class ScrapeSessionManager {
 	
 	public static ScrapeSessionManager createScrapeSessionManager() throws ScrapeException {
-		String className = System.getProperty(ScrapeConstants.SS_MANAGER_KEY, ProfessionalScrapeSessionManager.class.getName());
+		String className = System.getProperty(ScrapeConstants.SSA4J_MANAGER_KEY);
+		
+		if (className == null) {
+			
+			String msg = "SSA4J is not properly configured.  " + 
+					"You need to set a System property called '%s' to the fully qualified " +
+					"classname of the ScrapeSessionManager implementation you want to process " +
+					"the annotations.";
+			throw new ScrapeException(String.format(msg, ScrapeConstants.SSA4J_MANAGER_KEY));
+			
+		}
 		
 		try {
 			Class<?> managerClass = Class.forName(className);
