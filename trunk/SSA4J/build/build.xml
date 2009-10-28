@@ -35,11 +35,12 @@
 		</jar>
 		<jar jarfile="${dist.dir}/ssa4j-pro.jar" update="false">
 			<fileset dir="${classes.dir}">
-				<include name="org/ssa4j/propessional/**/*.class" />
+				<include name="org/ssa4j/professional/**/*.class" />
 			</fileset>
 		</jar>
 		<jar jarfile="${dist.dir}/ssa4j-ent.jar" update="false">
 			<fileset dir="${classes.dir}">
+				<include name="com/screenscraper/soapclient/**/*.class"/>
 				<include name="org/ssa4j/enterprise/**/*.class" />
 			</fileset>
 		</jar>
