@@ -2,13 +2,21 @@
 <ssa4j:mocksession xmlns:ssa4j="http://schemas.mobuser.com/ssa4jmock" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://ssa4j.googlecode.com/files/ssa4jmock-0.7.0.xsd" id="Shopping Site">
-	<scenario>
-
-		<test>
-		<![CDATA[
-		return session.page == 1;
-		]]>
-		</test>
+	
+	<script>
+	def getScenario(session) {
+		switch(session.page) {
+		case 1:
+			return "firstPage";
+		case 2:
+			return "secondPage";
+		case 3:
+			return "thridPage";
+		}
+	} 
+	</script>
+	
+	<scenario id="firstPage">
 		
 		<variables>
 			<variable name="zenid">2DFS3423SEAAFE3487</variable>
@@ -54,13 +62,7 @@
 		</dataset>
 
 	</scenario>
-	<scenario>
-
-		<test>
-		<![CDATA[
-		return session.page == 2;
-		]]>
-		</test>
+	<scenario id="secondPage">
 		
 		<variables>
 			<variable name="zenid">2DFS3423SEAAFE3487</variable>
@@ -106,14 +108,8 @@
 		</dataset>
 
 	</scenario>
-		<scenario>
+	<scenario id="thirdPage">
 
-		<test>
-		<![CDATA[
-		return session.page == 3;
-		]]>
-		</test>
-		
 		<variables>
 			<variable name="zenid">2DFS3423SEAAFE3487</variable>
 		</variables>
