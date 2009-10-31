@@ -26,6 +26,8 @@ public class ScrapeUtil {
 	
 	public static Object convert(Class<?> targetClass, String sformat, String source) throws Exception {
 		Object value = null;
+		if (source == null || source.trim().length() == 0)
+			return null;
 		//
 		// Convert to Calendar?
 		//

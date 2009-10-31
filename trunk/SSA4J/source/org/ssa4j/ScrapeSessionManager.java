@@ -312,9 +312,12 @@ public abstract class ScrapeSessionManager {
 						if (bindtype == BindType.Read) {
 							String varname = meta.name();
 							String value = getVariable(varname);
-							if (value != null) {
-								f.set(source, 
-									ScrapeUtil.convert(f.getType(), meta.format(), value.trim()));
+							if (value != null && value.length() > 0) {
+								Object converted = ScrapeUtil.convert(f.getType(), meta.format(), value.trim());
+								if (converted != null) {
+									f.set(source, converted);
+									log.debug(value + " -> " + converted.getClass());
+								}
 							}
 						}
 					}
@@ -329,9 +332,12 @@ public abstract class ScrapeSessionManager {
 					ScrapeSessionVariable meta = m.getAnnotation(ScrapeSessionVariable.class);
 					String varname = meta.name();
 					String value = getVariable(varname);
-					if (value != null) {
-						m.invoke(source, 
-							ScrapeUtil.convert(m.getParameterTypes()[0], meta.format(), value.trim()));
+					if (value != null && value.length() > 0) {
+						Object converted = ScrapeUtil.convert(m.getParameterTypes()[0], meta.format(), value.trim());
+						if (converted != null) {
+							m.invoke(source, converted);
+							log.debug(value + " -> " + converted.getClass());
+						}
 					}
 				}
 			}
