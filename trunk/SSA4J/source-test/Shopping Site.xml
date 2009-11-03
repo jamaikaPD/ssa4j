@@ -3,17 +3,15 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://ssa4j.googlecode.com/files/ssa4jmock-0.7.0.xsd" id="Shopping Site">
 	
-	<script>
-	def getScenario(session) {
-		switch(session.page) {
-		case 1:
-			return "firstPage";
-		case 2:
-			return "secondPage";
-		case 3:
-			return "thridPage";
-		}
-	} 
+	<script lang="groovy">
+	switch(session.page) {
+	case 1:
+		return "firstPage";
+	case 2:
+		return "secondPage";
+	case 3:
+		return "thirdPage";
+	}
 	</script>
 	
 	<scenario id="firstPage">
@@ -81,30 +79,6 @@
 				<field name="SHIPPING_WEIGHT">7.00</field>
 				<field name="MANUFACTURED_BY">Warner</field>
 			</datarecord> 
-			<datarecord>
-				<field name="TITLE">Lethal Weapon</field>
-				<field name="MODEL">DVD-LTWP</field>
-				<field name="SHIPPING_WEIGHT">7.00</field>
-				<field name="MANUFACTURED_BY">Warner</field>
-			</datarecord> 
-			<datarecord>
-				<field name="TITLE">Red Corner</field>
-				<field name="MODEL">DVD-REDC</field>
-				<field name="SHIPPING_WEIGHT">7.00</field>
-				<field name="MANUFACTURED_BY">Warner</field>
-			</datarecord> 
-			<datarecord>
-				<field name="TITLE">Speed</field>
-				<field name="MODEL">DVD-SPEED</field>
-				<field name="SHIPPING_WEIGHT">7.00</field>
-				<field name="MANUFACTURED_BY">Fox</field>
-			</datarecord> 
-			<datarecord>
-				<field name="TITLE">Speed 2: Cruise Control</field>
-				<field name="MODEL">DVD-SPEED2</field>
-				<field name="SHIPPING_WEIGHT">7.00</field>
-				<field name="MANUFACTURED_BY">Fox</field>
-			</datarecord> 
 		</dataset>
 
 	</scenario>
@@ -113,45 +87,6 @@
 		<variables>
 			<variable name="zenid">2DFS3423SEAAFE3487</variable>
 		</variables>
-
-		<dataset id="PRODUCTS"> 
-			<datarecord>
-				<field name="TITLE">The Matrix</field>
-				<field name="MODEL">DVD-MATR</field>
-				<field name="SHIPPING_WEIGHT">7.00</field>
-				<field name="MANUFACTURED_BY">Warner</field>
-			</datarecord> 
-			<datarecord>
-				<field name="TITLE">The Replacement Killers</field>
-				<field name="MODEL">DVD-RPMK</field>
-				<field name="SHIPPING_WEIGHT">23.00</field>
-				<field name="MANUFACTURED_BY">Microsoft</field>
-			</datarecord> 
-			<datarecord>
-				<field name="TITLE">There's Something About Mary</field>
-				<field name="MODEL">DVD-TSAB</field>
-				<field name="SHIPPING_WEIGHT">7.00</field>
-				<field name="MANUFACTURED_BY">Fox</field>
-			</datarecord> 
-			<datarecord>
-				<field name="TITLE">Under Siege</field>
-				<field name="MODEL">DVD-UNSG</field>
-				<field name="SHIPPING_WEIGHT">7.00</field>
-				<field name="MANUFACTURED_BY">Warner</field>
-			</datarecord> 
-			<datarecord>
-				<field name="TITLE">Under Siege 2 - Dark Territory</field>
-				<field name="MODEL">DVD-UNSG2</field>
-				<field name="SHIPPING_WEIGHT">7.00</field>
-				<field name="MANUFACTURED_BY">Warner</field>
-			</datarecord> 
-			<datarecord>
-				<field name="TITLE">You've Got Mail</field>
-				<field name="MODEL">DVD-YGEM</field>
-				<field name="SHIPPING_WEIGHT">7.00</field>
-				<field name="MANUFACTURED_BY">Warner</field>
-			</datarecord>
-		</dataset>
 
 	</scenario>
 

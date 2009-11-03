@@ -10,7 +10,7 @@ import org.ssa4j.ScrapeException;
 import org.ssa4j.ScrapeSessionManager;
 import org.ssa4j.ScrapeSessionTimeoutException;
 
-import com.screenscraper.common.DataRecord;
+import com.screenscraper.common.DataSet;
 import com.screenscraper.scraper.RemoteScrapingSession;
 import com.screenscraper.scraper.RemoteScrapingSessionException;
 
@@ -105,23 +105,16 @@ public class ProfessionalScrapeSessionManager extends ScrapeSessionManager {
 		}
 	}
 
-	@Override
-	protected DataRecord getDataRecordFromDataSet(String id, int ndx) throws ScrapeException {
-		try {
-			return remoteSession.getDataRecordFromDataSet(id, ndx);
-		} catch (RemoteScrapingSessionException e) {
-			log.warn(String.format("Error trying to get DataRecord[%d] from DataSet %s", ndx, id), e);
-			return null;
-		}
-	}
+	
 
 	@Override
-	protected int getNumDataRecordsInDataSet(String id) throws ScrapeException {
+	protected DataSet getDataSet(String name) throws ScrapeException {
 		try {
-			return remoteSession.getNumDataRecordsInDataSet(id);
+			Object obj = remoteSession.getVariable(name);
+			return (obj instanceof DataSet)?  (DataSet) obj : null;
 		} catch (RemoteScrapingSessionException e) {
-			log.warn(String.format("Error trying to get number of DataRecords in DataSet %s", id), e);
-			return 0;
+			log.warn(String.format("Problem getting variable %s", name), e);
+			return null;
 		}
 	}
 

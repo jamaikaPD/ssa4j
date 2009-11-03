@@ -5,6 +5,7 @@ import groovy.lang.GroovyShell;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.ssa4j.mock.schema.MockDataRecord;
 import org.ssa4j.mock.schema.MockDataRecordField;
 import org.ssa4j.mock.schema.MockDataSet;
 import org.ssa4j.mock.schema.MockScenario;
+import org.ssa4j.mock.schema.MockScript;
 import org.ssa4j.mock.schema.MockSession;
 import org.ssa4j.mock.schema.MockVariable;
 
@@ -65,80 +67,92 @@ public class MockScrapeSessionManager extends ScrapeSessionManager {
 	}
 
 	@Override
-	protected void execute(Object source, Map<String,String> cookiejar) throws ScrapeException {
-		String sessionId = getSessionId(source);
+	protected void execute(Object session, Map<String,String> cookiejar) throws ScrapeException {
+		String sessionId = getSessionId(session);
 		
 		String filename = String.format("%s.xml", sessionId);
 		log.info("Loading " + filename);
 		
 		File f = new File(scenarioDirectory, filename);	
-		try {
-			
-			InputStream in;
-			
-			if (f.exists()) {
-				log.info("Loading from filesystem");
+		InputStream in;
+		
+		if (f.exists()) {
+			log.info("Loading from filesystem");
+			try {
 				in = new FileInputStream(f);
-			} else {
-				log.info("Loading from classpath");
-				filename = "/"+filename;
-				in = getClass().getResourceAsStream(filename);
-				if (in == null) {
-					throw new ScrapeException(
-							String.format("Resource '%s' not found in classpath.", filename));
-				}
+			} catch (FileNotFoundException e) {
+				throw new MockScrapeException("Unabled to load MockSession file", e);
 			}
-			
-			MockSession mockSession = MockObject.toObject(MockSession.class, in);
-			log.debug(String.format("Number of Scenarios: %d", mockSession.scenarios.size()));
-			for (MockScenario scenario : mockSession.scenarios) {
-				log.debug("-------------- scenario -------------\n\n\n");
-				if (test(scenario.testScript, source, cookiejar)) {
-					for (MockDataSet mockdataset : scenario.datasets) {
-						DataSet dataset = new DataSet();
-						for (MockDataRecord mockRecord : mockdataset.datarecords) {
-							log.debug(mockRecord.toString());
-							DataRecord datarec = new DataRecord();
-							for (MockDataRecordField field : mockRecord.fields) {
-								datarec.put(field.name, field.value);
-							}
-							dataset.addDataRecord(datarec);
-						}
-						datasets.put(mockdataset.id, dataset);
-					}
-					if (scenario.variables != null) {
-						for (MockVariable var : scenario.variables) {
-							this.variables.put(var.name, var.value);
-						}
-					}
-						
-					return;
-				}
+		} else {
+			log.info("Loading from classpath");
+			filename = "/"+filename;
+			in = getClass().getResourceAsStream(filename);
+			if (in == null) {
+				throw new MockScrapeException(String.format("Resource '%s' not found in classpath.", filename));
 			}
+		}
+		
+		MockSession mockSession;
+		try {
+			mockSession = MockObject.toObject(MockSession.class, in);
 		} catch (Exception e) {
-			throw new ScrapeException(String.format("Failed to Mock scrape %s", sessionId), e);
+			throw new ScrapeException(String.format("Failed to load MockSession file %s", sessionId), e);
+		}
+		log.debug(String.format("Number of Scenarios: %d", mockSession.scenarios.size()));
+		if (mockSession.scenarios.size() > 0) {
+			MockScript script = mockSession.script;
+			if (script != null) {
+				// TODO Add support for other languages using the scripting extensions to Java
+				if ("groovy".equals(script.lang)) {
+					Object result = runScript(script.script, session, cookiejar);
+					if (result != null) {
+						for (MockScenario scenario : mockSession.scenarios) {
+							if (scenario.id.equals(result)) {
+								processScenario(scenario);
+								return;
+							} 
+						}
+						throw new MockScrapeException("No scenario with id='" + result+ "' was found.");
+					} else {
+						throw new MockScrapeException("No result returned from <script> block.");
+					}
+				} else {
+					throw new MockScrapeException("Currently only lang='groovy' supported on <script> tag.");
+				}
+			} else {
+				log.warn("No <script> block defined, defaulting to first scenario.");
+				processScenario(mockSession.scenarios.get(0));
+			}
+		} else {
+			throw new MockScrapeException("No scenarios defined in MockSession");
+		}
+	}
+	
+	protected void processScenario(MockScenario scenario) {
+		for (MockDataSet mockdataset : scenario.datasets) {
+			DataSet dataset = new DataSet();
+			for (MockDataRecord mockRecord : mockdataset.datarecords) {
+				log.debug(mockRecord.toString());
+				DataRecord datarec = new DataRecord();
+				for (MockDataRecordField field : mockRecord.fields) {
+					datarec.put(field.name, field.value);
+				}
+				dataset.addDataRecord(datarec);
+			}
+			datasets.put(mockdataset.id, dataset);
+		}
+		if (scenario.variables != null) {
+			for (MockVariable var : scenario.variables) {
+				this.variables.put(var.name, var.value);
+			}
 		}
 	}
 
-	@Override
-	protected DataRecord getDataRecordFromDataSet(String id, int ndx)
-			throws ScrapeException {
-		DataSet ds = datasets.get(id);
-		if (ds == null) {
-			log.warn(String.format("No DataSet found for id:'%s'", id));
-			return null;
-		}
-		return ds.getDataRecord(ndx);
-	}
+	
 
 	@Override
-	protected int getNumDataRecordsInDataSet(String id) throws ScrapeException {
-		DataSet ds = datasets.get(id);
-		if (ds == null) {
-			log.warn(String.format("No DataSet found for id:'%s'", id));
-			return 0;
-		}
-		return ds.getNumDataRecords();
+	protected DataSet getDataSet(String name) throws ScrapeException {
+		return datasets.get(name);
 	}
 
 	@Override
@@ -161,16 +175,16 @@ public class MockScrapeSessionManager extends ScrapeSessionManager {
 	 * called 'session'
 	 * @return Returns true if script logic returns true, false otherwise.
 	 */
-	private Boolean test(String script, Object source, Map<String,String> cookiejar) {
+	private Object runScript(String script, Object session, Map<String,String> cookiejar) {
 		log.debug(String.format("Running Script {\n%s\n}", script));
 		Binding binding = new Binding();
 		binding.setVariable("cookiejar", cookiejar);
-		binding.setVariable("session", source);
+		binding.setVariable("session", session);
 		GroovyShell shell = new GroovyShell(binding);
 
 		Object result = shell.evaluate(script);
 		log.debug("Script result: " + result);
-		return (Boolean) result;
+		return result;
 	}
 	
 }

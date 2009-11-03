@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.ssa4j.ScrapeSessionVariable.BindType;
 
 import com.screenscraper.common.DataRecord;
+import com.screenscraper.common.DataSet;
 
 /**
  * Abstract base class for ScrapeSessionManagers does all the Scraper annotation binding and processing.
@@ -64,6 +65,7 @@ public abstract class ScrapeSessionManager {
 	 */
 	protected abstract void setVariable(String name, String value) throws ScrapeException;
 	
+	protected abstract DataSet getDataSet(String name) throws ScrapeException;
 	/**
 	 * Returns a DataRecord from the specified DataSet
 	 * @param id The DataSet Identifier
@@ -71,7 +73,7 @@ public abstract class ScrapeSessionManager {
 	 * @return a DataRecord from the specified DataSet
 	 * @throws ScrapeException
 	 */
-	protected abstract DataRecord getDataRecordFromDataSet(String id, int ndx) throws ScrapeException;
+	//protected abstract DataRecord getDataRecordFromDataSet(String id, int ndx) throws ScrapeException;
 	
 	/**
 	 * Returns the total number of records in teh specified DataSet
@@ -79,7 +81,7 @@ public abstract class ScrapeSessionManager {
 	 * @return the total number of records in teh specified DataSet
 	 * @throws ScrapeException
 	 */
-	protected abstract int getNumDataRecordsInDataSet(String id) throws ScrapeException;
+	//protected abstract int getNumDataRecordsInDataSet(String id) throws ScrapeException;
 	
 	/**
 	 * Once the variables have been parsed from the ScrapeSessionVaraible annotations
@@ -288,15 +290,16 @@ public abstract class ScrapeSessionManager {
 					log.debug(String.format("@ScrapeDataSet (field:%s)", f.getName()));
 					ScrapeDataSet meta = f.getAnnotation(ScrapeDataSet.class);
 					String id = meta.value();
-					int numRecs = getNumDataRecordsInDataSet(id);
-					if (numRecs > 0) {
+					DataSet dataSet = getDataSet(id);
+					if (dataSet != null) {
+						int numRecs = dataSet.getNumDataRecords();
 						Class arrayType = f.getType();
 						if (arrayType.isArray()) {
 							Class arrayComponentType = arrayType.getComponentType();
 							Object arrayObj = Array.newInstance(arrayComponentType, numRecs);
 							f.set(source, arrayObj);
 							for (int ndx = 0; ndx < numRecs; ndx++) {
-				            	DataRecord rec = getDataRecordFromDataSet(id, ndx);
+				            	DataRecord rec = dataSet.getDataRecord(ndx);
 				            	Object obj = ScrapeUtil.convertDataRecordToObject(arrayComponentType, rec);
 				            	Array.set(arrayObj, ndx, obj);
 				            }

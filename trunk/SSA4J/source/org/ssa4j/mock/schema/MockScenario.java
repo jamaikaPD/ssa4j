@@ -3,6 +3,7 @@ package org.ssa4j.mock.schema;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
@@ -16,8 +17,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name="scenarioType", namespace="http://schemas.mobuser.com/ssa4jmock")
 public class MockScenario {
 	
-	@XmlElement(name="test")
-	public String testScript;
+	@XmlAttribute(name="id")
+	public String id;
 	
 	@XmlElement(name="dataset", required=false)
 	public List<MockDataSet> datasets = new ArrayList<MockDataSet>();

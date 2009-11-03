@@ -94,7 +94,7 @@ public class ScrapeUtil {
 						ScrapeDataRecordField field = (ScrapeDataRecordField) m.getAnnotation(ScrapeDataRecordField.class);
 						String key = field.name();
 						String value = (String) rec.get(key);
-						if (value != null) {
+						if (value != null && value.length() > 0) {
 							m.invoke(obj, convert(m.getParameterTypes()[0], field.format(), value.trim()));
 						}
 					} catch (Exception e) {
@@ -110,7 +110,7 @@ public class ScrapeUtil {
 						ScrapeDataRecordField field = (ScrapeDataRecordField) f.getAnnotation(ScrapeDataRecordField.class);
 						String key = field.name();
 						String value = (String) rec.get(key);
-						if (value != null) {
+						if (value != null && value.length() > 0) {
 							f.set(obj, convert(f.getType(), field.format(), value.trim()));
 						}
 					} catch (Exception e) {
@@ -129,15 +129,18 @@ public class ScrapeUtil {
 			return false;
 		if (method.getParameterTypes().length != 1)
 			return false;
+		if (method.getReturnType() != void.class)
+			return false;
 		return true;
 	}
 	
 	public static boolean isGetter(Method method) {
-		if (!method.getName().startsWith("get"))
+		String name = method.getName();
+		if (!(name.startsWith("get") || name.startsWith("is") || name.startsWith("has")))
 			return false;
 		if (method.getParameterTypes().length != 0)
 			return false;
-		if (method.getReturnType() != void.class)
+		if (method.getReturnType() == void.class)
 			return false;
 		return true;
 	}
