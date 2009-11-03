@@ -1,6 +1,8 @@
 #summary SSA4J Configuration Options
 #labels Featured
 
+<wiki:toc max_depth="2" />
+
 = Introduction =
 
 SSA4J Extensions (Professional, Enterprise, and Mock) all have configuration properties that can be set to override the default values.
