@@ -102,7 +102,10 @@ public abstract class ScrapeScriptDeployer {
         }
         
         out.flush();
+        data = out.toByteArray();
         out.close();
+        
+        deploy(name, data);
 	}
 	
 	protected abstract void deploy(String name, byte[] data) throws IOException;
