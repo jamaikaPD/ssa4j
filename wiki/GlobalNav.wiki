@@ -1,6 +1,6 @@
 #sidebar TableOfContents
 
- * [SSA4JInstall Install Guide]
+ * [SSA4JInstallGuide Install Guide]
  * [SSA4JTutorial Tutorial]
  * [SSA4JAnnotations Annotation Reference]
    * [SSA4JAnnotation_ScrapeSession @ScrapeSession]
