@@ -44,7 +44,7 @@ public class ImportTestCase {
 	public void testUploadWithProfessional() throws Exception {
 		ScrapeScriptDeployer deployer = 
 			new ProfessionalScrapeScriptDeployer(
-					new File("/Applications/screen-scraper_enterprise"));
+					new File("/usr/local/screen-scraper"));
 		
 		useDeployer(deployer);
 	}
