@@ -32,4 +32,9 @@ public interface ScrapeConstants {
 	 * The classname of the concrete implementation of ScrapeSessionManager
 	 */
 	public static final String SSA4J_MANAGER_KEY = "ssa4j.manager";
+
+	/**
+	 * The directory where screen-scraper is installed.
+	 */
+	public static final String SSA4J_SS_HOME_DIR = "ssa4j.screenscraper.home";
 }
