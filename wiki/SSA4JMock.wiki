@@ -12,13 +12,19 @@ Here is an example of how we would mock 3 possible responses from screen-scraper
 <ssa4j:mocksession xmlns:ssa4j="http://schemas.mobuser.com/ssa4jmock" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:schemaLocation="http://ssa4j.googlecode.com/files/ssa4jmock-0.7.0.xsd" id="Shopping Site">
-    <scenario>
-
-        <test>
-        <![CDATA[
-        return session.page == 1;
-        ]]>
-        </test>
+    
+    <script lang="groovy">
+    switch(session.page) {
+    case 1:
+        return "firstPage";
+    case 2:
+        return "secondPage";
+    case 3:
+        return "thirdPage";
+    }
+    </script>
+    
+    <scenario id="firstPage">
         
         <variables>
             <variable name="zenid">2DFS3423SEAAFE3487</variable>
@@ -64,13 +70,7 @@ Here is an example of how we would mock 3 possible responses from screen-scraper
         </dataset>
 
     </scenario>
-    <scenario>
-
-        <test>
-        <![CDATA[
-        return session.page == 2;
-        ]]>
-        </test>
+    <scenario id="secondPage">
         
         <variables>
             <variable name="zenid">2DFS3423SEAAFE3487</variable>
@@ -89,83 +89,14 @@ Here is an example of how we would mock 3 possible responses from screen-scraper
                 <field name="SHIPPING_WEIGHT">7.00</field>
                 <field name="MANUFACTURED_BY">Warner</field>
             </datarecord> 
-            <datarecord>
-                <field name="TITLE">Lethal Weapon</field>
-                <field name="MODEL">DVD-LTWP</field>
-                <field name="SHIPPING_WEIGHT">7.00</field>
-                <field name="MANUFACTURED_BY">Warner</field>
-            </datarecord> 
-            <datarecord>
-                <field name="TITLE">Red Corner</field>
-                <field name="MODEL">DVD-REDC</field>
-                <field name="SHIPPING_WEIGHT">7.00</field>
-                <field name="MANUFACTURED_BY">Warner</field>
-            </datarecord> 
-            <datarecord>
-                <field name="TITLE">Speed</field>
-                <field name="MODEL">DVD-SPEED</field>
-                <field name="SHIPPING_WEIGHT">7.00</field>
-                <field name="MANUFACTURED_BY">Fox</field>
-            </datarecord> 
-            <datarecord>
-                <field name="TITLE">Speed 2: Cruise Control</field>
-                <field name="MODEL">DVD-SPEED2</field>
-                <field name="SHIPPING_WEIGHT">7.00</field>
-                <field name="MANUFACTURED_BY">Fox</field>
-            </datarecord> 
         </dataset>
 
     </scenario>
-        <scenario>
+    <scenario id="thirdPage">
 
-        <test>
-        <![CDATA[
-        return session.page == 3;
-        ]]>
-        </test>
-        
         <variables>
             <variable name="zenid">2DFS3423SEAAFE3487</variable>
         </variables>
-
-        <dataset id="PRODUCTS"> 
-            <datarecord>
-                <field name="TITLE">The Matrix</field>
-                <field name="MODEL">DVD-MATR</field>
-                <field name="SHIPPING_WEIGHT">7.00</field>
-                <field name="MANUFACTURED_BY">Warner</field>
-            </datarecord> 
-            <datarecord>
-                <field name="TITLE">The Replacement Killers</field>
-                <field name="MODEL">DVD-RPMK</field>
-                <field name="SHIPPING_WEIGHT">23.00</field>
-                <field name="MANUFACTURED_BY">Microsoft</field>
-            </datarecord> 
-            <datarecord>
-                <field name="TITLE">There's Something About Mary</field>
-                <field name="MODEL">DVD-TSAB</field>
-                <field name="SHIPPING_WEIGHT">7.00</field>
-                <field name="MANUFACTURED_BY">Fox</field>
-            </datarecord> 
-            <datarecord>
-                <field name="TITLE">Under Siege</field>
-                <field name="MODEL">DVD-UNSG</field>
-                <field name="SHIPPING_WEIGHT">7.00</field>
-                <field name="MANUFACTURED_BY">Warner</field>
-            </datarecord> 
-            <datarecord>
-                <field name="TITLE">Under Siege 2 - Dark Territory</field>
-                <field name="MODEL">DVD-UNSG2</field>
-                <field name="SHIPPING_WEIGHT">7.00</field>
-                <field name="MANUFACTURED_BY">Warner</field>
-            </datarecord> 
-            <datarecord>
-                <field name="TITLE">You've Got Mail</field>
-                <field name="MODEL">DVD-YGEM</field>
-                <field name="SHIPPING_WEIGHT">7.00</field>
-                <field name="MANUFACTURED_BY">Warner</field>
-            </datarecord>
-        </dataset>
 
     </scenario>
 
