@@ -100,17 +100,11 @@ public class EnterpriseScrapeSessionManager extends ScrapeSessionManager {
 
 	}
 
-	@Override
-	protected DataRecord getDataRecordFromDataSet(String id, int ndx)
-			throws ScrapeException {
-		DataSet ds = loadDataSet(id);
-		return (ds != null)? ds.getDataRecord(ndx) : null;
-	}
+	
 
 	@Override
-	protected int getNumDataRecordsInDataSet(String id) throws ScrapeException {
-		DataSet ds = loadDataSet(id);
-		return (ds != null)? ds.getNumDataRecords() : 0;
+	protected DataSet getDataSet(String name) throws ScrapeException {
+		return loadDataSet(name);
 	}
 
 	@Override

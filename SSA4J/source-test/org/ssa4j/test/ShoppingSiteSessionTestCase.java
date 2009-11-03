@@ -1,5 +1,6 @@
 package org.ssa4j.test;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -7,10 +8,13 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.ssa4j.ScrapeException;
 import org.ssa4j.ScrapeSessionManager;
+import org.ssa4j.enterprise.EnterpriseScrapeScriptDeployer;
 import org.ssa4j.enterprise.EnterpriseScrapeSessionManager;
 import org.ssa4j.example.annotatted.Product;
 import org.ssa4j.example.annotatted.ShoppingSiteScrapingSession;
@@ -24,6 +28,12 @@ import com.screenscraper.scraper.RemoteScrapingSessionException;
 public class ShoppingSiteSessionTestCase extends TestCase {
 
 	protected static Logger log = LoggerFactory.getLogger(ShoppingSiteSessionTestCase.class);
+	
+	@Before
+	public void loadScreenScraperScript() throws ScrapeException, IOException {
+		EnterpriseScrapeScriptDeployer deployer = new EnterpriseScrapeScriptDeployer();
+		deployer.deploy(new File("scraper/Shopping Site (Scraping Session).sss"));
+	}
 	
 	@Test
 	public void testUsingLegacyAPI() {
@@ -112,7 +122,7 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
 		
-		assertSession(shoppingsession, cookieJar);
+		assertSession(shoppingsession, cookieJar, 18);
 		System.out.printf("Completed in %dms\n\n", System.currentTimeMillis()-startTime);
 	}
 	
@@ -138,7 +148,7 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
-		assertSession(shoppingsession, cookieJar);
+		assertSession(shoppingsession, cookieJar,18);
 		System.out.printf("Completed in %dms\n\n", System.currentTimeMillis()-startTime);
 	}
 	
@@ -165,13 +175,69 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
 		
-		assertSession(shoppingsession, cookieJar);
+		assertSession(shoppingsession, cookieJar, 6);
 		System.out.printf("Completed in %dms\n\n", System.currentTimeMillis()-startTime);
 	}
 	
-	public void assertSession(ShoppingSiteScrapingSession session, Map<String,String> cookieJar) {
+	@Test
+	public void testUsingMockScrapeSessionManagerPage2() throws Exception {
+		long startTime = System.currentTimeMillis();
+		// Create an instance of the annotated ScrapeSession POJO and
+		// set the values for all the annotated ScrapeSessionVariables
+		ShoppingSiteScrapingSession shoppingsession = new ShoppingSiteScrapingSession();
+		shoppingsession.setEmailAddress("test@test.com");
+		shoppingsession.setPassword("testing");
+		shoppingsession.setSearchKeyWord("dvd");
+		shoppingsession.setPage(2);
+		
+		// Create an instance of a ScrapeSessionManager
+		// NOTE: by default, a RemoteScrapeSessionManager is used which is compatible
+		// with both Profession and Enterprise editions of screen-scraper
+		ScrapeSessionManager scraper = new MockScrapeSessionManager();
+		
+		Map<String, String> cookieJar = new HashMap<String, String>();
+		// Tell the ScrapeSessionManager to scrape by passing in the annotated POJO
+		scraper.scrape(shoppingsession, null, cookieJar);
+		
+		// Now iterate through the results with ease.  Notice that at this point you
+		// are interacting with the POJOs.
+		
+		assertEquals("Number of products scraped", 2, shoppingsession.getProducts().length);
+		System.out.printf("Completed in %dms\n\n", System.currentTimeMillis()-startTime);
+	}
+	
+	@Test
+	public void testUsingMockScrapeSessionManagerPage3NoDataSet() throws Exception {
+		long startTime = System.currentTimeMillis();
+		// Create an instance of the annotated ScrapeSession POJO and
+		// set the values for all the annotated ScrapeSessionVariables
+		ShoppingSiteScrapingSession shoppingsession = new ShoppingSiteScrapingSession();
+		shoppingsession.setEmailAddress("test@test.com");
+		shoppingsession.setPassword("testing");
+		shoppingsession.setSearchKeyWord("dvd");
+		shoppingsession.setPage(3);
+		
+		// Create an instance of a ScrapeSessionManager
+		// NOTE: by default, a RemoteScrapeSessionManager is used which is compatible
+		// with both Profession and Enterprise editions of screen-scraper
+		ScrapeSessionManager scraper = new MockScrapeSessionManager();
+		
+		Map<String, String> cookieJar = new HashMap<String, String>();
+		// Tell the ScrapeSessionManager to scrape by passing in the annotated POJO
+		scraper.scrape(shoppingsession, null, cookieJar);
+		
+		// Now iterate through the results with ease.  Notice that at this point you
+		// are interacting with the POJOs.
+		
+		assertNull("products scraped", shoppingsession.getProducts());
+		System.out.printf("Completed in %dms\n\n", System.currentTimeMillis()-startTime);
+	}
+	
+	
+	public void assertSession(ShoppingSiteScrapingSession session, Map<String,String> cookieJar, int numResults) {
 		assertNotNull("zenid", cookieJar.get("zenid"));
-		assertEquals("Number of products scraped", 18, session.getProducts().length);
+		assertNotNull("session.getProducts()", session.getProducts());
+		assertEquals("Number of products scraped", numResults, session.getProducts().length);
 		for (Product product : session.getProducts()) {
 			assertNotNull("Title", product.getTitle());
 			assertNotNull("Model", product.getModel() );
