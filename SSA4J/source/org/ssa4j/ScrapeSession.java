@@ -17,5 +17,10 @@ import java.lang.annotation.Target;
 @Target(value=ElementType.TYPE)
 @Retention(value=RetentionPolicy.RUNTIME)
 public @interface ScrapeSession {
+	/**
+	 * The name of the scrape session as defined within the 
+	 * screen-scraper IDE.
+	 * @return
+	 */
 	String name();
 }

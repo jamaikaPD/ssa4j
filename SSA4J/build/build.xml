@@ -24,6 +24,27 @@
 
 		<copy file="schemas/ssa4jmock.xsd" todir="${dist.dir}" />
 	</target>
+	
+    <target name="make-javadoc">
+    	
+        <javadoc 
+        	access="public" 
+        	author="true" 
+        	destdir="doc" 
+        	doctitle="SSA4J Documentation" 
+        	nodeprecated="false" 
+        	nodeprecatedlist="false" 
+        	noindex="false" 
+        	nonavbar="false" 
+        	notree="false" 
+        	source="1.6" 
+        	splitindex="true" use="true" version="true">
+    		<classpath refid="build.classpath"/>
+        	<fileset dir="source">
+        		<include name="org/ssa4j/**/*.java"/>
+        	</fileset>
+    	</javadoc>
+    </target>
 
 	<target name="make-jars">
 		<delete dir="${dist.dir}" />

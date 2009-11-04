@@ -5,12 +5,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * This exception is thrown when one or more ScrapeSessionError session variables are
- * found when a ScrapeSession completes.  It is possible that one or more errors where 
- * found; in such cases use ScrapeSessionException.getErrors() to get a full list of all 
+ * This exception is thrown when one or more session variables identified by the
+ * {@link ScrapeSessionError} annotation are found when a ScrapeSession completes.  
+ * It is possible that one or more errors are found; in such cases use 
+ * {@link ScrapeSessionException#getErrors()} to get a full list of all 
  * Errors.
  * 
- * @author rodneya
+ * @author Rodney Aiglstorfer
  *
  */
 public class ScrapeSessionException extends ScrapeException {
@@ -22,10 +23,20 @@ public class ScrapeSessionException extends ScrapeException {
 		addError(code, rawText);
 	}
 
+	/**
+	 * Add an error to the exception.  The code can be any value.  
+	 * The rawText is the message.
+	 * @param code
+	 * @param rawText
+	 */
 	public void addError(int code, String rawText) {
 		errors.put(code, rawText);
 	}
 	
+	/**
+	 * Returns a list of errors found in the scrape session.
+	 * @return
+	 */
 	public Map<Integer, String> getErrors() {
 		return errors;
 	}
