@@ -9,16 +9,19 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ssa4j.ScrapeSessionVariable.BindType;
+import org.ssa4j.enterprise.EnterpriseScrapeSessionManager;
 
 import com.screenscraper.common.DataRecord;
 import com.screenscraper.common.DataSet;
 
 /**
- * Abstract base class for ScrapeSessionManagers does all the Scraper annotation binding and processing.
+ * Abstract base class for ScrapeSessionManagers does all the Scraper 
+ * annotation binding and processing.
  * 
  * Subclass this class to create specialized ScrapeSessionManagers.
  * 
  * @see ProfessionalScrapeSessionManager
+ * @see EnterpriseScrapeSessionManager
  * @see MockScrapeSessionManager
  * 
  * @author Rodney Aiglstorfer
@@ -53,7 +56,7 @@ public abstract class ScrapeSessionManager {
 	 * Called for every ScrapeSessionVaraible annotation passed back from scrape.
 	 * @param name
 	 * @param value
-	 * @throws ScrapeException
+	 * @throws ScrapeException thrown if there are any problems with the scrape
 	 */
 	protected abstract String getVariable(String name) throws ScrapeException;
 	
@@ -61,17 +64,23 @@ public abstract class ScrapeSessionManager {
 	 * This class is called for every ScrapeSessionVaraible annotation.
 	 * @param name
 	 * @param value
-	 * @throws ScrapeException
+	 * @throws ScrapeException thrown if there are any problems with the scrape
 	 */
 	protected abstract void setVariable(String name, String value) throws ScrapeException;
 	
+	/**
+	 * Returns the DataSet for a given session variable name.
+	 * @param name The session variable name
+	 * @return the DataSet for the given name
+	 * @throws ScrapeException thrown if there are any problems with the scrape
+	 */
 	protected abstract DataSet getDataSet(String name) throws ScrapeException;
 	/**
 	 * Returns a DataRecord from the specified DataSet
 	 * @param id The DataSet Identifier
 	 * @param ndx The DataRecord index
 	 * @return a DataRecord from the specified DataSet
-	 * @throws ScrapeException
+	 * @throws ScrapeException thrown if there are any problems with the scrape
 	 */
 	//protected abstract DataRecord getDataRecordFromDataSet(String id, int ndx) throws ScrapeException;
 	
@@ -79,7 +88,7 @@ public abstract class ScrapeSessionManager {
 	 * Returns the total number of records in teh specified DataSet
 	 * @param id The DataSet Identifier
 	 * @return the total number of records in teh specified DataSet
-	 * @throws ScrapeException
+	 * @throws ScrapeException thrown if there are any problems with the scrape
 	 */
 	//protected abstract int getNumDataRecordsInDataSet(String id) throws ScrapeException;
 	
@@ -87,27 +96,40 @@ public abstract class ScrapeSessionManager {
 	 * Once the variables have been parsed from the ScrapeSessionVaraible annotations
 	 * this method is called.  Presumably here is a where you would kick-off the scrape session.
 	 * @param source The object annotated with the ScrapeSession annotation
-	 * @throws ScrapeException
+	 * @throws ScrapeException thrown if there are any problems with the scrape
 	 */
 	protected abstract void execute(Object source, Map<String,String> cookiejar) throws ScrapeException;
 	
 	/**
 	 * Regardless of the manner in which the scrape has terminated this method
 	 * is invoked to allow for clean shutdown and cleanup.
-	 * @throws ScrapeException
+	 * @throws ScrapeException thrown if there are any problems with the scrape
 	 */
 	protected abstract void close() throws ScrapeException;
 	
 
-	public void scrape(Object source) throws ScrapeException {
-		this.scrape(source, null, null);
+	/**
+	 * Kicks off the scrape using the given annotated session object.
+	 * @param session A class annotated with {@link ScrapeSession}
+	 * @throws ScrapeException thrown if there are any problems with the scrape
+	 */
+	public void scrape(Object session) throws ScrapeException {
+		this.scrape(session, null, null);
 	}
 	
-	public void scrape(Object source, ScrapeSessionListener listener, Map<String,String> cookiejar) throws ScrapeException {
-		if (source.getClass().isAnnotationPresent(ScrapeSession.class) == false) 
+	/**
+	 * Kicks off the scrape using the given annotated session object
+	 * with optional support for a listener and cookieJar
+	 * @param session A class annotated with {@link ScrapeSession}
+	 * @param listener A class that implements {@link ScrapeSessionListener} (can be null)
+	 * @param cookiejar A cookieJar within which to read/write {@link ScrapeSessionCookies}
+	 * @throws ScrapeException
+	 */
+	public void scrape(Object session, ScrapeSessionListener listener, Map<String,String> cookiejar) throws ScrapeException {
+		if (session.getClass().isAnnotationPresent(ScrapeSession.class) == false) 
 			throw new ScrapeException("Object is not correctly annotated.  Expecting @ScrapeSession.");
 		
-		String sessionId = getSessionId(source);
+		String sessionId = getSessionId(session);
 		long stime = System.currentTimeMillis();
 		log.debug(String.format(">> Starting Scrape Session '%s'", sessionId));
 		if (sessionId != null) {
@@ -115,17 +137,17 @@ public abstract class ScrapeSessionManager {
 				if (listener != null)
 					listener.onScrapeReady();
 				// setup any variables required by the session
-				setup(source, cookiejar);
+				setup(session, cookiejar);
 	
 				// call the concrete impls execute method
 				long time = System.currentTimeMillis();
-	            execute(source, cookiejar);
+	            execute(session, cookiejar);
 	            time = System.currentTimeMillis() - time;
 	            log.info(String.format("<<< Scrape Session '%s' completed [%dms]", sessionId, time));
 	            
 	            // process the DataSet's from the sessions
 	            time = System.currentTimeMillis();
-	            process(source, cookiejar);
+	            process(session, cookiejar);
 	            time = System.currentTimeMillis() - time;
 	            log.info(String.format("<<< Scrape Session '%s' response processed [%dms]", sessionId, time));
 	            
@@ -161,6 +183,11 @@ public abstract class ScrapeSessionManager {
 			
 	}
 	
+	/**
+	 * Returns the session id for an annotated {@link ScrapeSession} class.
+	 * @param source
+	 * @return
+	 */
 	public String getSessionId(Object source) {
 		if (source != null && source.getClass().isAnnotationPresent(ScrapeSession.class)) 
 			return source.getClass().getAnnotation(ScrapeSession.class).name();

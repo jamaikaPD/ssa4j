@@ -11,6 +11,13 @@ import java.util.zip.ZipInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * General abstract class that subclasses implement to provide an ability
+ * to deploy *.sss files to a running screen-scraper instance.
+ * 
+ * @author Rodney Aiglstorfer
+ *
+ */
 public abstract class ScrapeScriptDeployer {
 
 	protected static Logger log = LoggerFactory.getLogger(ScrapeScriptDeployer.class);
@@ -21,6 +28,11 @@ public abstract class ScrapeScriptDeployer {
 		this.loader = loader;
 	}
 	
+	/**
+	 * Supports a single external *.sss file or a ZIP file that contains *.sss files.
+	 * @param file  A single *.sss file or a ZIP file.
+	 * @throws IOException Thrown if there are issues reading the file.
+	 */
 	public void deploy(File file) throws IOException {
 		
 		if (file.exists() == false) {
@@ -49,6 +61,13 @@ public abstract class ScrapeScriptDeployer {
 		}
 	}
 	
+	/**
+	 * Supports a single *.sss file or a ZIP file that contains *.sss files
+	 * stored as a class resource (e.g. packaged with the JAR).
+	 * @param resource The resource path to a single *.sss file or a ZIP 
+	 * file containing multiple *.sss files
+	 * @throws IOException Thrown if there are any issues reading the resource
+	 */
 	public void deploy(String resource) throws IOException {
 		InputStream in = loader.getResourceAsStream(resource);
 		
@@ -68,6 +87,11 @@ public abstract class ScrapeScriptDeployer {
 		}
 	}
 	
+	/**
+	 * Deploy *.sss files streamed within a ZipInputStream
+	 * @param zip
+	 * @throws IOException
+	 */
 	public void deploy(ZipInputStream zip) throws IOException {
 		ZipEntry entry;
 
@@ -89,6 +113,12 @@ public abstract class ScrapeScriptDeployer {
         zip.close();
 	}
 	
+	/**
+	 * Deploy single *.sss file streamed within an InputStream
+	 * @param name Optional identifier used by the logger
+	 * @param in InputStream containing a single *.sss file.
+	 * @throws IOException
+	 */
 	public void deploy(String name, InputStream in) throws IOException {
 		log.info(String.format("Importing '%s'", name));
 		
