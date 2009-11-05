@@ -82,7 +82,7 @@ public class ShoppingSiteScrapingSession {
 			session.setPage(1);
 			
 			ScrapeSessionManager manager = new MockScrapeSessionManager();
-			manager.scrape(session);
+			manager.scrape(session, null);
 			
 			for (Product product : session.getProducts()) {
 				System.out.println("==============");

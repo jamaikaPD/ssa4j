@@ -5,11 +5,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ssa4j.ScrapeSessionVariable.BindType;
 import org.ssa4j.enterprise.EnterpriseScrapeSessionManager;
+import org.ssa4j.mock.MockScrapeSessionManager;
+import org.ssa4j.professional.ProfessionalScrapeSessionManager;
 
 import com.screenscraper.common.DataRecord;
 import com.screenscraper.common.DataSet;
@@ -28,6 +33,35 @@ import com.screenscraper.common.DataSet;
  *
  */
 public abstract class ScrapeSessionManager {
+	
+	private static ExecutorService pool;
+	private static ExecutorService getPool() {
+		synchronized (ScrapeSessionManager.class) {
+			if (pool == null) {
+				int maxThreads = Integer.valueOf(System.getProperty(ScrapeConstants.SSA4J_MAX_THREADS, "5"));
+				log.info("Initialized ThreadPool Size to " + maxThreads);
+				pool = Executors.newFixedThreadPool(maxThreads);
+			}
+		}
+		return pool;
+	}
+	/**
+	 * Initiates an orderly shutdown in which previously submitted
+     * scrape sessions are executed, but no new scrapes sessions 
+     * will be accepted.  
+     * <p>
+     * Blocks until all scrape sessions have completed execution or 
+     * the timeout occurs, or the current thread is interrupted, 
+     * whichever happens first.
+     * </p><p>
+     * <em>NOTE</em> Invocation has no additional effect if already shut down.
+     * </p>
+	 * @throws InterruptedException
+	 */
+	public static void shutdown(long timeout, TimeUnit units) throws InterruptedException {
+		getPool().shutdown();
+		getPool().awaitTermination(timeout, units);
+	}
 	
 	public static ScrapeSessionManager createScrapeSessionManager() throws ScrapeException {
 		String className = System.getProperty(ScrapeConstants.SSA4J_MANAGER_KEY);
@@ -97,74 +131,31 @@ public abstract class ScrapeSessionManager {
 	 * @param session A class annotated with {@link ScrapeSession}
 	 * @throws ScrapeException thrown if there are any problems with the scrape
 	 */
-	public void scrape(Object session) throws ScrapeException {
-		this.scrape(session, null, null);
+	public void scrape(Object session, Map<String,String> cookiejar) throws ScrapeException {
+		this.scrape(session, cookiejar, null);
 	}
+
 	
 	/**
 	 * Kicks off the scrape using the given annotated session object
-	 * with optional support for a listener and cookieJar
+	 * with optional support for a listener and cookieJar.  If listener is not
+	 * null then scrape is performed asynchronously.
 	 * @param session A class annotated with {@link ScrapeSession}
-	 * @param listener A class that implements {@link ScrapeSessionListener} (can be null)
+	 * @param listener A class that implements {@link ScrapeSessionListener} If not-null, then 
+	 * scrape is executed asynchronously via the built in threadpool.
 	 * @param cookiejar A cookieJar within which to read/write {@link ScrapeSessionCookies}
 	 * @throws ScrapeException
 	 */
-	public void scrape(Object session, ScrapeSessionListener listener, Map<String,String> cookiejar) throws ScrapeException {
+	public <T> void scrape(T session, Map<String,String> cookiejar, ScrapeSessionListener<T> listener) throws ScrapeException {
 		if (session.getClass().isAnnotationPresent(ScrapeSession.class) == false) 
 			throw new ScrapeException("Object is not correctly annotated.  Expecting @ScrapeSession.");
 		
-		String sessionId = getSessionId(session);
-		long stime = System.currentTimeMillis();
-		log.debug(String.format(">> Starting Scrape Session '%s'", sessionId));
-		if (sessionId != null) {
-			try {
-				if (listener != null)
-					listener.onScrapeReady();
-				// setup any variables required by the session
-				setup(session, cookiejar);
-	
-				// call the concrete impls execute method
-				long time = System.currentTimeMillis();
-	            execute(session, cookiejar);
-	            time = System.currentTimeMillis() - time;
-	            log.info(String.format("<<< Scrape Session '%s' completed [%dms]", sessionId, time));
-	            
-	            // process the DataSet's from the sessions
-	            time = System.currentTimeMillis();
-	            process(session, cookiejar);
-	            time = System.currentTimeMillis() - time;
-	            log.info(String.format("<<< Scrape Session '%s' response processed [%dms]", sessionId, time));
-	            
-	            if (listener != null)
-					listener.onScrapeComplete();
-	            
-			} catch (ScrapeSessionTimeoutException e) {
-				if (listener != null)
-					listener.onScrapeTimeout();
-				else
-					throw e;
-			} catch (ScrapeSessionException e) {
-				if (listener != null)
-					listener.onScrapeError(e);
-				else 
-					throw e;
-			} catch (ScrapeException e) {
-				// just pass along
-				throw e;
-			} catch (Exception e) {
-				// wrap in a ScrapeException and pass along
-				String msg = String.format("Unexpected problem with session '%s'", sessionId);
-				throw new ScrapeException(msg, e);
-			} finally {
-				// Very important! Be sure to disconnect from the server.
-	            close();
-			}
+		ScrapeSessionRunner<T> runner = new ScrapeSessionRunner<T>(session, listener, cookiejar, this);
+		if (listener != null) {
+			getPool().execute(runner);
 		} else {
-			throw new ScrapeException("Adapter is not correctly annotated");
+			runner.run();
 		}
-		stime = System.currentTimeMillis() - stime;
-		log.debug(String.format("<< Finished Scrape Session '%s' [%dms]", sessionId, stime));
-			
 	}
 	
 	/**
@@ -183,12 +174,12 @@ public abstract class ScrapeSessionManager {
 	 * @param source The {@link ScrapeSession} annotated object.
 	 * @throws ScrapeException
 	 */
-	private void setup(Object source, Map<String,String> cookiejar) throws ScrapeException {
+	protected void setup(Object source, Map<String,String> cookiejar) throws ScrapeException {
 		setup(source.getClass(), source, cookiejar);
 	}
 	
 	@SuppressWarnings({ "unchecked" })
-	private void setup(Class c, Object source, Map<String,String> cookiejar) throws ScrapeException {
+	protected void setup(Class c, Object source, Map<String,String> cookiejar) throws ScrapeException {
 		try {
 			for (Field f : c.getDeclaredFields()) {
 				f.setAccessible(true);
@@ -240,7 +231,7 @@ public abstract class ScrapeSessionManager {
 	 * @throws ScrapeException
 	 */
 	@SuppressWarnings({ "unchecked" })
-	private void process(Object source, Map<String,String> cookiejar) throws ScrapeException {
+	protected void process(Object source, Map<String,String> cookiejar) throws ScrapeException {
 		Class c = source.getClass();
 		
 		log.debug("Processing Variables and DataSets ...");
@@ -259,7 +250,7 @@ public abstract class ScrapeSessionManager {
 	}
 	
 	@SuppressWarnings({ "unchecked" })
-	private void processCookies(Class c, Object source, Map<String,String> cookiejar) throws ScrapeException {
+	protected void processCookies(Class c, Object source, Map<String,String> cookiejar) throws ScrapeException {
 		try {
 			log.info(String.format("cookiejar: %b class: %b", cookiejar!=null, c.isAnnotationPresent(ScrapeSessionCookies.class)));
 			//
@@ -292,7 +283,7 @@ public abstract class ScrapeSessionManager {
 	}
 	
 	@SuppressWarnings({ "unchecked" })
-	private void processVariablesAndDataSets(Class c, Object source, Map<String,String> cookiejar) throws ScrapeException {
+	protected void processVariablesAndDataSets(Class c, Object source, Map<String,String> cookiejar) throws ScrapeException {
 		
 		try {
 			for (Field f : c.getDeclaredFields()) {
@@ -369,7 +360,7 @@ public abstract class ScrapeSessionManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	private ScrapeSessionException processErrors(Class c, Object source, ScrapeSessionException exception) throws ScrapeException {
+	protected ScrapeSessionException processErrors(Class c, Object source, ScrapeSessionException exception) throws ScrapeException {
 		ScrapeSessionErrors errors = (ScrapeSessionErrors)c.getAnnotation(ScrapeSessionErrors.class);
 		if (errors != null) {
 			ScrapeSessionError[] errorList = errors.value();
