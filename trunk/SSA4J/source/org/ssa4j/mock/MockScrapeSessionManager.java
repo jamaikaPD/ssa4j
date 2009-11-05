@@ -48,8 +48,22 @@ import com.screenscraper.common.DataSet;
  */
 public class MockScrapeSessionManager extends ScrapeSessionManager {
 	
-	private HashMap<String, DataSet> datasets = new HashMap<String, DataSet>();
-	private Map<String, String> variables = new HashMap<String, String>();
+	private static final ThreadLocal<Map<String, DataSet>> datasets = new ThreadLocal<Map<String, DataSet>>() {
+
+		@Override
+		protected Map<String, DataSet> initialValue() {
+			return new HashMap<String, DataSet>();
+		}
+		
+	};
+	private static final ThreadLocal<Map<String, String>> variables = new ThreadLocal<Map<String, String>>() {
+
+		@Override
+		protected Map<String, String> initialValue() {
+			return new HashMap<String, String>();
+		}
+		
+	};
 	private File scenarioDirectory;
 	
 	public MockScrapeSessionManager() {
@@ -62,8 +76,9 @@ public class MockScrapeSessionManager extends ScrapeSessionManager {
 	}
 
 	@Override
-	protected void close() throws ScrapeException {
-		datasets.clear();
+	public void close() throws ScrapeException {
+		datasets.remove();
+		variables.remove();
 	}
 
 	@Override
@@ -139,11 +154,11 @@ public class MockScrapeSessionManager extends ScrapeSessionManager {
 				}
 				dataset.addDataRecord(datarec);
 			}
-			datasets.put(mockdataset.id, dataset);
+			datasets.get().put(mockdataset.id, dataset);
 		}
 		if (scenario.variables != null) {
 			for (MockVariable var : scenario.variables) {
-				this.variables.put(var.name, var.value);
+				variables.get().put(var.name, var.value);
 			}
 		}
 	}
@@ -152,7 +167,7 @@ public class MockScrapeSessionManager extends ScrapeSessionManager {
 
 	@Override
 	protected DataSet getDataSet(String name) throws ScrapeException {
-		return datasets.get(name);
+		return datasets.get().get(name);
 	}
 
 	@Override
@@ -164,7 +179,7 @@ public class MockScrapeSessionManager extends ScrapeSessionManager {
 	
 	protected String getVariable(String name) throws ScrapeException {
 		if (variables != null)
-			return (String) variables.get(name);
+			return (String) variables.get().get(name);
 		return null;
 	}
 	

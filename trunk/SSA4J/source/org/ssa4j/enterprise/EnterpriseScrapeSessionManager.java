@@ -19,12 +19,26 @@ import com.screenscraper.soapclient.SOAPInterfaceServiceLocator;
 public class EnterpriseScrapeSessionManager extends ScrapeSessionManager {
 	
 	// Necessary calls to auto-generated classes.
-	SOAPInterface soap;
-	String soapSessionId;
-	int timeout = 1;
+	private SOAPInterface soap;
+	private int timeout = 1;
 	
-	Map<String, String> sessionVariables = new HashMap<String, String>();
-	Map<String, DataSet> dataSetCache = new HashMap<String, DataSet>();
+	private static final ThreadLocal<String> soapSessionId = new ThreadLocal<String>();
+	private static final ThreadLocal<Map<String, String>> sessionVariables = new ThreadLocal<Map<String, String>>() {
+
+		@Override
+		protected Map<String, String> initialValue() {
+			return new HashMap<String, String>();
+		}
+		
+	};
+	private static final ThreadLocal<Map<String, DataSet>> dataSetCache = new ThreadLocal<Map<String, DataSet>>() {
+
+		@Override
+		protected Map<String, DataSet> initialValue() {
+			return new HashMap<String, DataSet>();
+		}
+		
+	};
 	
 	public EnterpriseScrapeSessionManager() throws ScrapeException {
 		// "http://localhost:8779/axis/services/SOAPInterface";
@@ -54,12 +68,13 @@ public class EnterpriseScrapeSessionManager extends ScrapeSessionManager {
 	}
 
 	@Override
-	protected void close() throws ScrapeException {
+	public void close() throws ScrapeException {
 		try {
 			// Clean up memory usage by screen-scraper.
-			soap.removeCompletedScrapingSession(this.soapSessionId);
-			soap = null;
-			soapSessionId = null;
+			soap.removeCompletedScrapingSession(soapSessionId.get());
+			soapSessionId.remove();
+			sessionVariables.remove();
+			dataSetCache.remove();
 		} catch (RemoteException e) {
 			throw new ScrapeException("Error closing session", e);
 		}
@@ -72,22 +87,22 @@ public class EnterpriseScrapeSessionManager extends ScrapeSessionManager {
 		
 		try {
 			// Initialize the scraping session.
-			soapSessionId = soap.initializeScrapingSession(sessionId);
+			soapSessionId.set(soap.initializeScrapingSession(sessionId));
 			
 			// set the timeout for the session
-			soap.setTimeout(soapSessionId, timeout);
+			soap.setTimeout(soapSessionId.get(), timeout);
 			
 			// Set all session variables
-			for (Entry<String, String> entry : sessionVariables.entrySet()) {
-				soap.setVariable(this.soapSessionId, entry.getKey(), entry.getValue());
+			for (Entry<String, String> entry : sessionVariables.get().entrySet()) {
+				soap.setVariable(soapSessionId.get(), entry.getKey(), entry.getValue());
 			}
 
 			// Start scraping. This call returns immediately,
 			// though the scraping session is not completed.
-			soap.scrape(soapSessionId);
+			soap.scrape(soapSessionId.get());
 
 			// Wait until scraping completes.
-			while (soap.isFinished(soapSessionId) != 1) {
+			while (soap.isFinished(soapSessionId.get()) != 1) {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException ignored) {
@@ -100,8 +115,6 @@ public class EnterpriseScrapeSessionManager extends ScrapeSessionManager {
 
 	}
 
-	
-
 	@Override
 	protected DataSet getDataSet(String name) throws ScrapeException {
 		return loadDataSet(name);
@@ -110,7 +123,7 @@ public class EnterpriseScrapeSessionManager extends ScrapeSessionManager {
 	@Override
 	protected String getVariable(String name) throws ScrapeException {
 		try {
-			return soap.getVariable(this.soapSessionId, name);
+			return soap.getVariable(soapSessionId.get(), name);
 		} catch (RemoteException e) {
 			throw new ScrapeException("Error getting variable " + name, e);
 		}
@@ -119,19 +132,19 @@ public class EnterpriseScrapeSessionManager extends ScrapeSessionManager {
 	@Override
 	protected void setVariable(String name, String value)
 			throws ScrapeException {
-		sessionVariables.put(name, value);
+		sessionVariables.get().put(name, value);
 	}
 	
 	protected DataSet loadDataSet(String dataSetId) throws ScrapeException {
 		
 		DataSet ds = null;
 		try {
-			if (dataSetCache.containsKey(dataSetId)) {
-				ds = dataSetCache.get(dataSetId);
+			if (dataSetCache.get().containsKey(dataSetId)) {
+				ds = dataSetCache.get().get(dataSetId);
 			} else {
-				String[][] rawDataSet = soap.getDataSet(this.soapSessionId, dataSetId);
+				String[][] rawDataSet = soap.getDataSet(soapSessionId.get(), dataSetId);
 				ds = createDataSet(rawDataSet);
-				dataSetCache.put(dataSetId, ds);
+				dataSetCache.get().put(dataSetId, ds);
 			}
 		} catch (RemoteException e) {
 			throw new ScrapeException("Error loading DataSet " + dataSetId, e);
