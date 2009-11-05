@@ -75,22 +75,6 @@ public abstract class ScrapeSessionManager {
 	 * @throws ScrapeException thrown if there are any problems with the scrape
 	 */
 	protected abstract DataSet getDataSet(String name) throws ScrapeException;
-	/**
-	 * Returns a DataRecord from the specified DataSet
-	 * @param id The DataSet Identifier
-	 * @param ndx The DataRecord index
-	 * @return a DataRecord from the specified DataSet
-	 * @throws ScrapeException thrown if there are any problems with the scrape
-	 */
-	//protected abstract DataRecord getDataRecordFromDataSet(String id, int ndx) throws ScrapeException;
-	
-	/**
-	 * Returns the total number of records in teh specified DataSet
-	 * @param id The DataSet Identifier
-	 * @return the total number of records in teh specified DataSet
-	 * @throws ScrapeException thrown if there are any problems with the scrape
-	 */
-	//protected abstract int getNumDataRecordsInDataSet(String id) throws ScrapeException;
 	
 	/**
 	 * Once the variables have been parsed from the ScrapeSessionVaraible annotations
@@ -105,7 +89,7 @@ public abstract class ScrapeSessionManager {
 	 * is invoked to allow for clean shutdown and cleanup.
 	 * @throws ScrapeException thrown if there are any problems with the scrape
 	 */
-	protected abstract void close() throws ScrapeException;
+	public abstract void close() throws ScrapeException;
 	
 
 	/**

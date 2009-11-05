@@ -36,13 +36,20 @@ import com.screenscraper.scraper.RemoteScrapingSessionException;
  */
 public class ProfessionalScrapeSessionManager extends ScrapeSessionManager {
 	
-	private RemoteScrapingSession remoteSession;
+	private static final ThreadLocal<RemoteScrapingSession> remoteSession = new ThreadLocal<RemoteScrapingSession>();
 	
 	private String scraperHost;
 	private int scraperPort;
 	private int timeout;
 	
-	private HashMap<String, String> sessionVariables = new HashMap<String, String>();
+	private static final ThreadLocal<HashMap<String, String>> sessionVariables = new ThreadLocal<HashMap<String, String>>() {
+
+		@Override
+		protected HashMap<String, String> initialValue() {
+			return new HashMap<String, String>();
+		}
+		
+	};
 
 	/**
 	 * Creates a RemoteScrapeSessionManager using the default settings 
@@ -71,10 +78,13 @@ public class ProfessionalScrapeSessionManager extends ScrapeSessionManager {
 	}
 
 	@Override
-	protected void close() throws ScrapeException {
+	public void close() throws ScrapeException {
 		try {
-			if (remoteSession != null)
-				remoteSession.disconnect();
+			if (remoteSession.get() != null) {
+				remoteSession.get().disconnect();
+				remoteSession.remove();
+			}
+			sessionVariables.remove();
 		} catch (IOException e) {
 			throw new ScrapeException("Error trying to close scraping session");
 		}
@@ -85,16 +95,16 @@ public class ProfessionalScrapeSessionManager extends ScrapeSessionManager {
 		try {
 			String sessionId = getSessionId(source);
 			log.info(String.format(">> Connecting to Screen-Scraper '%s:%d' ", scraperHost, scraperPort));
-			remoteSession = new RemoteScrapingSession(sessionId, scraperHost, scraperPort);
-			for (Entry<String, String> entry : sessionVariables.entrySet()) {
-				remoteSession.setVariable(entry.getKey(), entry.getValue());
+			remoteSession.set(new RemoteScrapingSession(sessionId, scraperHost, scraperPort));
+			for (Entry<String, String> entry : sessionVariables.get().entrySet()) {
+				remoteSession.get().setVariable(entry.getKey(), entry.getValue());
 			}
 			
-			remoteSession.setTimeout(timeout);
+			remoteSession.get().setTimeout(timeout);
 			
-			remoteSession.scrape();
+			remoteSession.get().scrape();
 			
-			if (remoteSession.sessionTimedOut()) {
+			if (remoteSession.get().sessionTimedOut()) {
 				throw new ScrapeSessionTimeoutException(sessionId);
 			}
 			
@@ -110,7 +120,7 @@ public class ProfessionalScrapeSessionManager extends ScrapeSessionManager {
 	@Override
 	protected DataSet getDataSet(String name) throws ScrapeException {
 		try {
-			Object obj = remoteSession.getVariable(name);
+			Object obj = remoteSession.get().getVariable(name);
 			return (obj instanceof DataSet)?  (DataSet) obj : null;
 		} catch (RemoteScrapingSessionException e) {
 			log.warn(String.format("Problem getting variable %s", name), e);
@@ -120,13 +130,13 @@ public class ProfessionalScrapeSessionManager extends ScrapeSessionManager {
 
 	@Override
 	protected void setVariable(String name, String value) throws ScrapeException {
-		sessionVariables.put(name, value);
+		sessionVariables.get().put(name, value);
 	}
 
 	@Override
 	protected String getVariable(String name) throws ScrapeException {
 		try {
-			return (String) remoteSession.getVariable(name);
+			return (String) remoteSession.get().getVariable(name);
 		} catch (RemoteScrapingSessionException e) {
 			log.warn(String.format("Problem getting variable %s", name), e);
 			return null;
