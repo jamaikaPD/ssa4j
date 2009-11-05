@@ -37,4 +37,9 @@ public interface ScrapeConstants {
 	 * The directory where screen-scraper is installed.
 	 */
 	public static final String SSA4J_SS_HOME_DIR = "ssa4j.screenscraper.home";
+	
+	/**
+	 * The max number of concurrent threads to allow
+	 */
+	public static final String SSA4J_MAX_THREADS = "ssa4j.max.threads";
 }

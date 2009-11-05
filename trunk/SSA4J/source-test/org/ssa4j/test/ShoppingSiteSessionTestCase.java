@@ -117,7 +117,7 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		
 		Map<String, String> cookieJar = new HashMap<String, String>();
 		// Tell the ScrapeSessionManager to scrape by passing in the annotated POJO
-		scraper.scrape(shoppingsession, null, cookieJar);
+		scraper.scrape(shoppingsession, cookieJar);
 		
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
@@ -144,7 +144,7 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		
 		Map<String, String> cookieJar = new HashMap<String, String>();
 		// Tell the ScrapeSessionManager to scrape by passing in the annotated POJO
-		scraper.scrape(shoppingsession, null, cookieJar);
+		scraper.scrape(shoppingsession, cookieJar);
 		
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
@@ -170,7 +170,7 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		
 		Map<String, String> cookieJar = new HashMap<String, String>();
 		// Tell the ScrapeSessionManager to scrape by passing in the annotated POJO
-		scraper.scrape(shoppingsession, null, cookieJar);
+		scraper.scrape(shoppingsession, cookieJar);
 		
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
@@ -197,7 +197,7 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		
 		Map<String, String> cookieJar = new HashMap<String, String>();
 		// Tell the ScrapeSessionManager to scrape by passing in the annotated POJO
-		scraper.scrape(shoppingsession, null, cookieJar);
+		scraper.scrape(shoppingsession, cookieJar);
 		
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
@@ -224,7 +224,7 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 		
 		Map<String, String> cookieJar = new HashMap<String, String>();
 		// Tell the ScrapeSessionManager to scrape by passing in the annotated POJO
-		scraper.scrape(shoppingsession, null, cookieJar);
+		scraper.scrape(shoppingsession, cookieJar);
 		
 		// Now iterate through the results with ease.  Notice that at this point you
 		// are interacting with the POJOs.
