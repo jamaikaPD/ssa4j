@@ -20,7 +20,6 @@ class ScrapeSessionRunner<T> implements Runnable {
 		this.manager = manager;
 	}
 	
-	@Override
 	public void run() {		
 		String sessionId = manager.getSessionId(session);
 		long stime = System.currentTimeMillis();
