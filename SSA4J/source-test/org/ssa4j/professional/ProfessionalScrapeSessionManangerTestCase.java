@@ -18,23 +18,19 @@ public class ProfessionalScrapeSessionManangerTestCase extends TestCase {
 	
 	ScrapeSessionListener<ShoppingSiteScrapingSession> listener = new ScrapeSessionListener<ShoppingSiteScrapingSession>() {
 
-		@Override
 		public void onScrapeComplete(ShoppingSiteScrapingSession session, Map<String, String> cookieJar) {
 			assertShoppingSession(session, cookieJar);
 		}
 
-		@Override
 		public void onScrapeError(ShoppingSiteScrapingSession session, Map<String, String> cookieJar, Throwable t) {
 			t.printStackTrace();
 			fail(t.getMessage());
 		}
 
-		@Override
 		public void onScrapeReady(ShoppingSiteScrapingSession session, Map<String, String> cookieJar) {
 			/* Ignore */
 		}
 
-		@Override
 		public void onScrapeTimeout(ShoppingSiteScrapingSession session, Map<String, String> cookieJar) {
 			fail("ScrapeSession timed out");
 		}
