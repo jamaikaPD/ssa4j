@@ -150,11 +150,29 @@ public abstract class ScrapeSessionManager {
 		if (session.getClass().isAnnotationPresent(ScrapeSession.class) == false) 
 			throw new ScrapeException("Object is not correctly annotated.  Expecting @ScrapeSession.");
 		
-		ScrapeSessionRunner<T> runner = new ScrapeSessionRunner<T>(session, listener, cookiejar, this);
+		ScrapeSessionRunner<T> runner;
 		if (listener != null) {
+			runner = new ScrapeSessionRunner<T>(session, listener, cookiejar, this);
 			getPool().execute(runner);
 		} else {
-			runner.run();
+			ScrapeSessionSemaphore<T> semaphore = new ScrapeSessionSemaphore<T>();
+			runner = new ScrapeSessionRunner<T>(session, semaphore, cookiejar, this);
+			getPool().execute(runner);
+			synchronized (semaphore) {
+				while (semaphore.isRunning()) {
+					try {
+						semaphore.wait();
+					} catch (InterruptedException e) {
+						throw new ScrapeException(
+								"Problem blocking on semaphore", e);
+					}
+				}
+			}
+			if (semaphore.didTimeout())
+				throw new ScrapeSessionTimeoutException(getSessionId(session));
+
+			if (semaphore.hasErrors())
+				throw new ScrapeException(semaphore.getCause());
 		}
 	}
 	
