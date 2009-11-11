@@ -11,14 +11,12 @@ public class ScrapeSessionSemaphore<T> implements ScrapeSessionListener<T> {
 	private Map<String, String> cookieJar = null;
 	private Throwable cause;
 
-	@Override
 	public void onScrapeComplete(T session, Map<String, String> cookieJar) {
 		this.session = session;
 		this.cookieJar = cookieJar;
 		notifyComplete();
 	}
 
-	@Override
 	public void onScrapeError(T session, Map<String, String> cookieJar, Throwable t) {
 		this.session = session;
 		this.cookieJar = cookieJar;
@@ -27,7 +25,6 @@ public class ScrapeSessionSemaphore<T> implements ScrapeSessionListener<T> {
 		notifyComplete();
 	}
 
-	@Override
 	public void onScrapeReady(T session, Map<String, String> cookieJar) {
 		this.running = true;
 		this.errors = false;
@@ -37,7 +34,6 @@ public class ScrapeSessionSemaphore<T> implements ScrapeSessionListener<T> {
 		this.cause = null;
 	}
 
-	@Override
 	public void onScrapeTimeout(T session, Map<String, String> cookieJar) {
 		this.session = session;
 		this.cookieJar = cookieJar;
