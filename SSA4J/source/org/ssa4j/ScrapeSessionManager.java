@@ -171,8 +171,13 @@ public abstract class ScrapeSessionManager {
 			if (semaphore.didTimeout())
 				throw new ScrapeSessionTimeoutException(getSessionId(session));
 
-			if (semaphore.hasErrors())
-				throw new ScrapeException(semaphore.getCause());
+			if (semaphore.hasErrors()) {
+				if (semaphore.getCause() instanceof ScrapeException) {
+					throw (ScrapeException) semaphore.getCause();
+				} else {
+					throw new ScrapeException(semaphore.getCause());
+				}
+			}
 		}
 	}
 	
