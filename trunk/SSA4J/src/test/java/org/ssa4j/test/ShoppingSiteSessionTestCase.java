@@ -31,8 +31,12 @@ public class ShoppingSiteSessionTestCase extends TestCase {
 	
 	@Before
 	public void loadScreenScraperScript() throws ScrapeException, IOException {
+		File sssFile = new File("scraper/Shopping Site (Scraping Session).sss");
+		if (sssFile.exists() == false) {
+			fail("File not found: " + sssFile.getAbsolutePath());
+		}
 		EnterpriseScrapeScriptDeployer deployer = new EnterpriseScrapeScriptDeployer();
-		deployer.deploy(new File("scraper/Shopping Site (Scraping Session).sss"));
+		deployer.deploy(sssFile);
 	}
 	
 	@Test
