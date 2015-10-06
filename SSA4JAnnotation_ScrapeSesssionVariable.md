@@ -1,0 +1,1 @@
+This annotation can be used on either an field in the session class or on a setter/getter method.  The purpose is to define a binding with session variables.  Depending on how the annotation is used, the session variable is either passed into the session or read from the session or both.
